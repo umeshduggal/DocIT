@@ -1,3 +1,4 @@
+<% @IntendedRecipient = IntendedRecipient.find(params[:id]) rescue nil %>
 <h2>Sign up</h2>
 
 <%= form_for(resource, as: resource_name, url: guest_registration_path) do |f| %>
@@ -8,9 +9,11 @@
   <% end %>
 
 <%= f.hidden_field :parent_id, value: @IntendedRecipient.user_id %>
+<%= f.hidden_field :email, value: @IntendedRecipient.email %>
 
   <div><%= f.label :email %>
-    <%= f.email_field :email,value: @IntendedRecipient.email, disabled: true %></div>
+    <%= f.email_field :email, value: @IntendedRecipient.email, disabled: true %></div>
+
   <div><%= f.label :name %>
     <%= f.text_field :name, autofocus: true %></div>
 

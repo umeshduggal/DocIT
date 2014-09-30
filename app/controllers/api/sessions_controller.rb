@@ -9,7 +9,7 @@ class Api::SessionsController < Devise::SessionsController
   respond_to :json
   
   def create
-    resource = User.find_for_database_authentication(:mobile_number => params[:user][:mobile_number]) unless params[:user].nil?
+    resource = User.find_for_database_authentication(:mobile_number => "+"+params[:user][:mobile_number]) unless params[:user].nil?
     return failure unless resource
 
     #warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")

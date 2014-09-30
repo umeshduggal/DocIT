@@ -17,7 +17,7 @@ DocIT::Application.routes.draw do
   end
 devise_scope :user do
    get 'users/:id/signup', :to => 'guest_registrations#new', :as => 'signup_new'
-   post 'guest_registration', :to => 'guest_registrations#create', :as => 'guest_registration'
+   post 'users/:id/registration', :to => 'guest_registrations#create', :as => 'guest_registration'
  end
   devise_for :users, :controllers => {:registrations => "registrations"}
 

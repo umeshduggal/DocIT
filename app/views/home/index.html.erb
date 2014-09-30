@@ -1,7 +1,9 @@
 <% if user_signed_in? %>
-  <% unless current_user.verified %>
+  <% unless current_user.verified? %>
     <%= render "verify_number_form" %>
   <% else %>
+  
+<% if current_user.has_role? :admin %>
     <h1>Twilio phone reminder demo</h1>
     <h2 style="color: #ff0000"><%= params['msg'] %></h2>
     <h3>Enter your phone number to receive an automated reminder</h3>
@@ -10,6 +12,9 @@
       <%= submit_tag 'Call me!', {:class=>"btn btn-success", :style=>"float:left"} %>
     <% end %>
   <% end %>
+  <% end %>
+    
+    
 <% else %>
 <section>
   <h1>DocIT Lorem Ipsum </h1>
