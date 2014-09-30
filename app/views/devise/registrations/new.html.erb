@@ -1,0 +1,63 @@
+<h2>Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <% devise_error_messages! %>
+
+  <%= f.fields_for :assignments do |builder| %>
+    <%= builder.hidden_field :role_id, value: Role.find_by_name('Doctor').id %>
+  <% end %>
+
+  <div><%= f.label :name %>
+    <%= f.text_field :name, autofocus: true %></div>
+
+  <div><%= f.label :practice_name %>
+    <%= f.text_field :practice_name %></div>
+
+  <div><%= f.label :mobile_number %><i>(Please enter valid number. This number will be verified later.)</i><br />
+    <%= f.text_field :mobile_number %></div>
+
+  <div><%= f.label :email %>
+    <%= f.email_field :email %></div>
+
+  <div><%= f.label :password %> <% if @validatable %><i>(<%= @minimum_password_length %> characters minimum)</i><% end %><br />
+    <%= f.password_field :password, autocomplete: "off" %></div>
+
+  <div><%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+
+  <%= f.fields_for :intended_recipients do |builder| %>
+    <%= render "intended_recipient_fields", :f => builder %>
+  <% end %>
+  <div>
+    <%= link_to_add_fields "Add Intended Recipent", f, :intended_recipients %>
+  </div>
+  <div>
+
+    <section>
+      <%= content_tag :section, :class => "" do %>
+        <% field_set_tag "Credit Card Detail for Monthly Subscription" do  -%>
+          <% fields_for @credit_card_detail do |cc| -%>
+            <div class="boxes">
+              <div><%= cc.label :credit_card_type %>
+                <%= cc.select :credit_card_type, options_for_select(["Visa","MasterCard","Discover","Amex","Switch","Solo","Maestro"]), :include_blank => true %></div>
+
+              <div><%= cc.label :credit_card_number %>
+                <%= cc.text_field :credit_card_number %></div>
+              <div><%= cc.label :exp_month %>
+                <%= cc.text_field :exp_month %></div>
+              <div><%= cc.label :exp_year %>
+                <%= cc.text_field :exp_year %></div>
+              <div><%= cc.label :cvv2 %>
+                <%= cc.text_field :cvv2 %></div>
+
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </section>
+  </div>
+  <div><%= f.submit "Sign up" %></div>
+<% end %>
+
+
+<%= render "devise/shared/links" %>

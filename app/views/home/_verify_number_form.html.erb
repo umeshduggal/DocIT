@@ -1,0 +1,12 @@
+<h2>Please enter code to verify your Mobile Number</h2>
+<%= form_tag({:controller => "home", :action => "number_verification"}, {:id=> 'verify_mobile_number'}) do %>		  
+  <div class="field">
+    <%= hidden_field_tag :user_id, current_user.id %>
+  </div>
+  <div class="field"><%= label_tag :verification_code %>
+    <%= text_field_tag 'verification_code', nil, autofocus: true %>
+  </div>
+  <div class="actions" style="overflow: hidden">
+    	<%= submit_tag 'Submit', {:class=>"btn btn-success", :style=>"float:left"} %>
+  </div>
+  <% end %>

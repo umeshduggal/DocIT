@@ -1,0 +1,28 @@
+<h2>Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: guest_registration_path) do |f| %>
+  <% devise_error_messages! %>
+
+  <%= f.fields_for :assignments do |builder| %>
+    <%= builder.hidden_field :role_id, value: Role.find_by_name('IntendedRecipient').id %>
+  <% end %>
+
+<%= f.hidden_field :parent_id, value: @IntendedRecipient.user_id %>
+
+  <div><%= f.label :email %>
+    <%= f.email_field :email,value: @IntendedRecipient.email, disabled: true %></div>
+  <div><%= f.label :name %>
+    <%= f.text_field :name, autofocus: true %></div>
+
+  <div><%= f.label :practice_name %>
+    <%= f.text_field :practice_name %></div>
+
+  <div><%= f.label :password %> <% if @validatable %><i>(<%= @minimum_password_length %> characters minimum)</i><% end %><br />
+    <%= f.password_field :password, autocomplete: "off" %></div>
+
+  <div><%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+
+  <div><%= f.submit "Sign up" %></div>
+<% end %>
+
