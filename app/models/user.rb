@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :practice_name, :mobile_number, :verification_code, :verified, :parent_id, :intended_recipients_attributes, :assignments_attributes
 
   before_save :ensure_authentication_token
-  validates :mobile_number, presence: true, :if => Proc.new {|user| user.has_role? :doctor}
+  validates :mobile_number, presence: true, :if => :check_user_role
   validates :mobile_number, uniqueness: true
   has_many :intended_recipients, :dependent => :destroy
   accepts_nested_attributes_for :intended_recipients, :allow_destroy => true
@@ -21,15 +21,24 @@ class User < ActiveRecord::Base
         :reject_if => lambda {|a| a[:role_id].blank? },
           :allow_destroy => :true
   
-#  after_create :send_invitation_email
-#
-#  def send_invitation_email
-#    if self.has_role? :doctor
-#      self.intended_recipients.each do |ir| 
-#        UserMailer.send_registration_link(self, ir)
-#      end
-#    end
-#  end
+  after_create :send_invitation_email
+
+  def send_invitation_email
+    self.assignments.each do |a|
+        if a.has_role? :doctor
+          self.intended_recipients.each do |ir| 
+            u = UserMailer.send_registration_link(self, ir).deliver
+            Rails.logger.info u.inspect
+          end
+      end
+    end
+  end
+  
+  def check_user_role
+    self.assignments.each do |a|
+      return a.has_role? :doctor
+    end
+  end
   
   def ensure_authentication_token
     if authentication_token.blank?
@@ -52,7 +61,7 @@ class User < ActiveRecord::Base
   end
   
   def verified?
-    self.verified unless self.mobile_number.blank?
+    return self.verified unless self.mobile_number.blank?
     true
   end
  

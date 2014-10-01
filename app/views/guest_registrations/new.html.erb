@@ -1,4 +1,4 @@
-<% @IntendedRecipient = IntendedRecipient.find(params[:id]) rescue nil %>
+<% @IntendedRecipient = IntendedRecipient.find(params[:id]) %>
 <h2>Sign up</h2>
 
 <%= form_for(resource, as: resource_name, url: guest_registration_path) do |f| %>

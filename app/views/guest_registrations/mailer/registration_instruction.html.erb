@@ -1,5 +1,5 @@
 <p>Hi <%= @email %>! Welcome to DocIT</p>
 
-<p>You are invited by <%=  %> to register as intended recipient, For registration please follow the link below:</p>
+<p>You are invited by <%= @user.name %> to register as his/her intended recipient, For registration please follow the link below:</p>
 
-<p><%= link_to 'Register as Intended recipient', signup_new_url(@user.id) %></p>
+<p><%= link_to 'Register as Intended recipient', signup_new_url(@id) %></p>

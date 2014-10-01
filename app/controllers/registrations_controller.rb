@@ -34,7 +34,7 @@ class RegistrationsController < Devise::RegistrationsController
           response = client.account.sms.messages.create(
             from: TWILIO_CONFIG['from'],
             to: resource.mobile_number,
-            body: "Thanks for signing up. To verify your account mobile number, please enter code #{verification_number}."
+            body: "Thanks for signing up on DocIt. To verify your account mobile number, please enter code #{verification_number}."
           )
           resource.update_attributes(:verification_code => verification_number) rescue ""          
         else

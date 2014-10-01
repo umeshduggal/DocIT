@@ -119,10 +119,14 @@ class HomeController < ApplicationController
   end
 
   def hello_email
-    mail(:to => "umesh duggal <umeshduggal1@gmail.com>") do |format|
-      format.text { render :text => "This is text!" }
-      format.html { render :text => "<h1>This is HTML</h1>" }
-    end
+    to = IntendedRecipient.last
+    UserMailer.send_registration_link(User.last,to).deliver
+    render :nothing => true
+    
+#    mail(:to => "umesh duggal <umeshduggal1@gmail.com>") do |format|
+#      format.text { render :text => "This is text!" }
+#      format.html { render :text => "<h1>This is HTML</h1>" }
+#    end
 end
   
 end
