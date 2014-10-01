@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   before_save :ensure_authentication_token
   validates :mobile_number, presence: true, :if => :check_user_role
-  validates :mobile_number, uniqueness: true
+  validates :mobile_number, uniqueness: true, allow_nil: true
   has_many :intended_recipients, :dependent => :destroy
   accepts_nested_attributes_for :intended_recipients, :allow_destroy => true
   
