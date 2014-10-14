@@ -27,8 +27,8 @@ class Api::TwilioController < ApplicationController
     data = {
       :from => TWILIO_CONFIG['from'],
       :to => params['number'],
-      :url => BASE_URL + "/patient_call?call_id=#{call_id}&user_email=umeshduggal1@gmail.com&user_token=zRQLE8LGPgtYedJyZzW7",
-      :StatusCallback => BASE_URL + "/call_status?call_id=#{call_id}&user_email=umeshduggal1@gmail.com&user_token=zRQLE8LGPgtYedJyZzW7&attempt=#{attempt}"
+      :url => BASE_URL + "/patient_call?call_id=#{call_id}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}",
+      :StatusCallback => BASE_URL + "/call_status?call_id=#{call_id}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&attempt=#{attempt}"
     }
     begin
       client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
