@@ -87,7 +87,7 @@ devise_scope :user do
 #  end
   root to: 'home#index'
   #temporary added for api urls testing ...
-  match '/:controller(/:action(/:id))', :via => [:get, :post]
+  match '/:controller(/:action(/:id))', :controller => /api\/[^\/]+/, :via => [:get, :post]
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.

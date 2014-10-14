@@ -45,8 +45,8 @@ DocIT::Application.configure do
     domain: "gmail.com",
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: "umeshduggal1@gmail.com",
-    password: "Ishu0701"
+    user_name: "docitinfo@gmail.com",
+    password: "docit@123"
     }
   
 end

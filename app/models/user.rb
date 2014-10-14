@@ -13,14 +13,13 @@ class User < ActiveRecord::Base
   has_many :intended_recipients, :dependent => :destroy
   accepts_nested_attributes_for :intended_recipients, :allow_destroy => true
   
-  
   has_many :subscriptions
   has_many :assignments, :dependent => :destroy
   has_many :roles, :through => :assignments
   accepts_nested_attributes_for :assignments,
         :reject_if => lambda {|a| a[:role_id].blank? },
           :allow_destroy => :true
-  
+  has_many :call_logs, :dependent => :destroy
   after_create :send_invitation_email
 
   def send_invitation_email

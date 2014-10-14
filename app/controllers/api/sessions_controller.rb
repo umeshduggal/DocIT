@@ -45,4 +45,5 @@ class Api::SessionsController < Devise::SessionsController
                       :data => {} }
   end
   
+  
 end
