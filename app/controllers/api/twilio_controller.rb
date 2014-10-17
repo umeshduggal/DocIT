@@ -141,13 +141,14 @@ class Api::TwilioController < ApplicationController
   def patient_information
     @language = params[:language]
     call_log = CallLog.find(params[:call_id])
-    @recording_url = "http://api.twilio.com/2010-04-01/Accounts/#{TWILIO_CONFIG['sid']}/Recordings/#{call_log.patient_identifier_recording_sid}"
+    call_log.update_attributes(:time_of_conversation=>Time.zone.now)
+    @recording_url = call_log.patient_identifier_link
     render :action => "patient_information.xml.builder", :layout => false
   end
   
   def doctor_responce
     @language = params[:language]
-    CallLog.find(params[:call_id]).update_attributes(:conversation_recording_sid => params[:RecordingSid],:conversation_call_status =>params[:DialCallStatus])
+    CallLog.find(params[:call_id]).update_attributes(:conversation_recording_sid => params[:RecordingSid],:conversation_call_status =>params[:DialCallStatus],:conversation_call_duration=>params[:DialCallDuration])
     if ["busy", "no-answer", "failed", "canceled"].include? params[:DialCallStatus]
       render :action => "goodbye.xml.builder", :layout => false 
       return
@@ -163,7 +164,7 @@ class Api::TwilioController < ApplicationController
   
   def call_status
     call_log = CallLog.find(params[:call_id])
-    call_log.update_attributes(:call_sid => params[:CallSid], :call_duration =>params[:CallDuration])
+    call_log.update_attributes(:call_sid => params[:CallSid], :call_duration =>params[:CallDuration],:call_status => params[:CallStatus])
     if params[:attempt] == "first" && params[:CallStatus] == "no-answer"
       sleep(2.minutes)
       Rails.logger.info "making second attempt"

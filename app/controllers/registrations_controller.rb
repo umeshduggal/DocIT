@@ -27,16 +27,22 @@ class RegistrationsController < Devise::RegistrationsController
         unless resource.id.nil?
           @subscription.user_id = resource.id
           @subscription.save!   
-          # Instantiate a Twilio client
-          client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
-          # Create and send an SMS message
-          verification_number = rand.to_s[2...8]
-          response = client.account.sms.messages.create(
-            from: TWILIO_CONFIG['from'],
-            to: resource.mobile_number,
-            body: "Thanks for signing up on DocIt. To verify your account mobile number, please enter code #{verification_number}."
-          )
-          resource.update_attributes(:verification_code => verification_number) rescue ""          
+          begin
+            # Instantiate a Twilio client
+            client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
+            # Create and send an SMS message
+            verification_number = rand.to_s[2...8]
+            response = client.account.sms.messages.create(
+              from: TWILIO_CONFIG['from'],
+              to: resource.mobile_number,
+              body: "Thanks for signing up on DocIt. To verify your account mobile number, please enter code #{verification_number}."
+            )
+            resource.update_attributes(:verification_code => verification_number) 
+          rescue StandardError => msg
+            Rails.logger.info "---- Twilio error -----"
+            Rails.logger.info msg.inspect
+            Rails.logger.info "---- Twilio error -----"
+          end    
         else
           custom_errors = []
         end

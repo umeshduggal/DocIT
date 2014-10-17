@@ -21,14 +21,8 @@ devise_scope :user do
  end
   devise_for :users, :controllers => {:registrations => "registrations"}
 
-  resources :payments, only: [:show, :create, :destroy] do
-    collection do
-      get :success
-      get :cancel
-      post :notify
-    end
-  end
-  
+
+  match '/call_logs' => 'call_log#index', :via => :get
 #  match 'home/makecall' => 'home#makecall', :via => :post
 #  match 'home/reminder' => 'home#reminder', :via => :post
 #  match 'home/goodbye' => 'home#goodbye', :via => :post

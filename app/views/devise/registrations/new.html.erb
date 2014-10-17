@@ -14,7 +14,7 @@
     <%= f.text_field :practice_name %></div>
 
   <div><%= f.label :mobile_number %><i>(Please enter valid number. This number will be verified later.)</i><br />
-    <%= f.text_field :mobile_number %></div>
+    <%= f.text_field :mobile_number,:type=> "tel" %></div>
 
   <div><%= f.label :email %>
     <%= f.email_field :email %></div>
@@ -58,6 +58,8 @@
   </div>
   <div><%= f.submit "Sign up" %></div>
 <% end %>
-
+<script>
+  $("#user_mobile_number").intlTelInput();
+</script>
 
 <%= render "devise/shared/links" %>

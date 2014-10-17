@@ -1,0 +1,30 @@
+<h1>List of Call Log</h1>
+
+<table class="table table-hover table-condensed table-bordered">
+  <thead>
+    <tr>
+      <th>Dr Name</th>
+      <th>Practice Name</th>
+      <th>Date & Time of conversation</th>
+      <th>Duration of conversation</th>
+      <th>Link to MP3 of Patient Identifier </th>
+      <th>Link to MP3 of reason for consultation</th>
+      <th>Link to listen to the recording of the call</th>
+      </tr>
+  </thead>
+
+  <tbody>
+    <% @call_logs.each do |call_log| %>
+      <tr>
+        <td><%= call_log.user.name %></td>
+        <td><%= call_log.user.practice_name %></td>
+        <td><%= call_log.time_of_conversation %></td>
+        <td><%= call_log.conversation_call_duration %></td>
+        <td><%= link_to 'link to MP3', call_log.patient_identifier_link, :target =>"_blank" %></td>
+        <td><%= link_to 'link to MP3', call_log.reason_for_consultation_link, :target =>"_blank" %></td>
+        <td><%= link_to 'link to MP3', call_log.conversation_recording_link, :target =>"_blank" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
