@@ -5,7 +5,7 @@ class Api::TwilioController < ApplicationController
   
   
   # base URL of this application
-  BASE_URL = "http://b65f751.ngrok.com/api/twilio"
+  BASE_URL = "http://4d36bdb.ngrok.com/api/twilio"
   # Use the Twilio REST API to initiate an outgoing call
   def makecall
     if !params['number']
@@ -51,12 +51,14 @@ class Api::TwilioController < ApplicationController
   
   def patient_call
     @post_to = BASE_URL + "/language_selection?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}"
+    @redirect_to = BASE_URL + "/patient_call?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}"
     render :action => "patient_call.xml.builder", :layout => false
   end
   
   def language_selection
     if params['Digits'] == '1'
       @post_to = BASE_URL + "/patient_identifier?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}"
+      @redirect_to = BASE_URL + "/language_selection?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&Digits=1"
       render :action => "language_selection.xml.builder", :layout => false
       return
     end
