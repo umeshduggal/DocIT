@@ -62,8 +62,8 @@ class Api::TwilioController < ApplicationController
       render :action => "language_selection.xml.builder", :layout => false
       return
     end
-#    redirect_to :action => 'patient_call', :call_id => params[:call_id], :user_email=> params[:user_email],:user_token=> params[:user_token]
-#    return
+    redirect_to :action => 'patient_call', :call_id => params[:call_id], :user_email=> params[:user_email],:user_token=> params[:user_token]
+    return
   end
   
   def patient_identifier
