@@ -14,6 +14,9 @@ DocIT::Application.routes.draw do
       post 'sessions' => 'sessions#create', :as => 'login'
       delete 'sessions' => 'sessions#destroy', :as => 'logout'
     end
+    get  '/api/call_log(.:format)', :to => 'api/call_log#index', :as => 'api_call_log_index'
+    delete  '/api/call_log/:id(.:format)', :to => 'api/call_log#destroy', :as => 'api_call_log'
+    resources :call_log
   end
 devise_scope :user do
    get 'users/:id/signup', :to => 'guest_registrations#new', :as => 'signup_new'
