@@ -124,7 +124,6 @@ ActiveRecord::Schema.define(:version => 20141103105959) do
     t.datetime "confirmation_sent_at"
     t.string   "last_name"
     t.integer  "title_id"
-    t.string   "confirm_mobile_number"
     t.boolean  "terms_of_service"
   end
 
