@@ -47,10 +47,10 @@ namespace "Docit" do
     task :consultation_type => :environment do
         consulations = [
           {:id => 1, :description=> 'How much will you charge for a consultation less than 5 minutes ( CPT 99499)',:lower_limit => 0, :upper_limit=> 5},
-          {:id => 2, :description=> 'How much will you charge for a consultation less than 5 minutes ( CPT 99499)',:lower_limit => 5, :upper_limit=> 10},
-          {:id => 3, :description=> 'How much will you charge for a consultation less than 5 minutes ( CPT 99499)',:lower_limit => 10, :upper_limit=> 20},
-          {:id => 4, :description=> 'How much will you charge for a consultation less than 5 minutes ( CPT 99499)',:lower_limit => 20, :upper_limit=> 30},
-          {:id => 5, :description=> 'How much will you charge for a consultation less than 5 minutes ( CPT 99499)',:lower_limit => 30,:upper_limit => 'null'},
+          {:id => 2, :description=> 'How much will you charge for a consultation 5-10 minutes ( CPT 99441)',:lower_limit => 5, :upper_limit=> 10},
+          {:id => 3, :description=> 'How much will you charge for a consultation 10-20 minutes (CPT 99442)',:lower_limit => 10, :upper_limit=> 20},
+          {:id => 4, :description=> 'How much will you charge for a consultation 20-30 minutes (CPT 99443)',:lower_limit => 20, :upper_limit=> 30},
+          {:id => 5, :description=> 'How much will you charge for a consultation greater than 30 minutes( CPT 99499)',:lower_limit => 30,:upper_limit => 'null'},
         ]
 
         consulations.each do |c|
