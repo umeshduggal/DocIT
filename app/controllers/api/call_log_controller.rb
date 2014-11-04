@@ -10,8 +10,8 @@ class Api::CallLogController < ApplicationController
   def index
     begin
       call_log = current_user.call_logs
-      call_log = call_log.as_json(:only => [ :id,:patient_mobile_number, :conversation_call_status,:conversation_call_duration, :time_of_conversation, :call_status,:conversation_call_status,:call_duration],
-        :methods => [:patient_identifier_link,:reason_for_consultation_link,:conversation_recording_link])
+      call_log = call_log.as_json(:only => [ :id,:patient_mobile_number, :conversation_call_status,:conversation_call_duration, :call_status,:conversation_call_status,:call_duration],
+        :methods => [:conversation_datetime,:patient_identifier_link,:reason_for_consultation_link,:conversation_recording_link])
       count = call_log.length
     rescue StandardError => msg
       render :status => 401,

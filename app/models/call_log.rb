@@ -20,7 +20,7 @@ class CallLog < ActiveRecord::Base
   end
   
   def conversation_datetime
-    self.time_of_conversation.localtime rescue nil
+    self.time_of_conversation.strftime("%Y-%m-%d %H:%M:%S") rescue nil
   end
   
 end
