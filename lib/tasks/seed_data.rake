@@ -50,12 +50,12 @@ namespace "Docit" do
           {:id => 2, :description=> 'How much will you charge for a consultation less than 5 minutes ( CPT 99499)',:lower_limit => 5, :upper_limit=> 10},
           {:id => 3, :description=> 'How much will you charge for a consultation less than 5 minutes ( CPT 99499)',:lower_limit => 10, :upper_limit=> 20},
           {:id => 4, :description=> 'How much will you charge for a consultation less than 5 minutes ( CPT 99499)',:lower_limit => 20, :upper_limit=> 30},
-          {:id => 5, :description=> 'How much will you charge for a consultation less than 5 minutes ( CPT 99499)',:lower_limit => 30,:upper_limit => nil},
+          {:id => 5, :description=> 'How much will you charge for a consultation less than 5 minutes ( CPT 99499)',:lower_limit => 30,:upper_limit => 'null'},
         ]
 
         consulations.each do |c|
-          unless ConsultationType.find(c[:id])
-            sql="insert into consulation_types (id, description, lower_limit, upper_limit,created_at,updated_at) values (%s,'%s',%s,%s,'%s','%s')" % [ c[:id], c[:description],c[:lower_limit],c[:upper_limit],Time.zone.now, Time.zone.now ]
+          unless ConsultationType.find_by_id(c[:id])
+            sql="insert into consultation_types(id, description, lower_limit, upper_limit,created_at,updated_at) values (%s,'%s',%s,%s,'%s','%s')" % [ c[:id], c[:description],c[:lower_limit],c[:upper_limit],Time.zone.now, Time.zone.now ]
             puts "Creating consultation type: #{c[:id]}"
             ActiveRecord::Base.connection.execute sql
           end
