@@ -7,14 +7,23 @@
     <%= builder.hidden_field :role_id, value: Role.find_by_name('Doctor').id %>
   <% end %>
 
-  <div><%= f.label :name %>
-    <%= f.text_field :name, autofocus: true %></div>
+  <div><%= f.label :first_name %>
+    <%= f.text_field :first_name, autofocus: true %></div>
 
+<div><%= f.label :last_name %>
+    <%= f.text_field :last_name%></div>
+
+  <div><%= f.label :title %>
+  <%= f.collection_select(:title_id, Title.all, :id, :name, :prompt => 'Please select title') %>
+  </div>
   <div><%= f.label :practice_name %>
     <%= f.text_field :practice_name %></div>
 
   <div><%= f.label :mobile_number %><i>(Please enter valid number. This number will be verified later.)</i><br />
-    <%= f.text_field :mobile_number,:type=> "tel" %></div>
+    <%= f.text_field :mobile_number, :type=> "tel" %></div>
+
+<div><%= f.label :mobile_number_confirmation %>
+    <%= f.text_field :mobile_number_confirmation,:type=> "tel" %></div>
 
   <div><%= f.label :email %>
     <%= f.email_field :email %></div>
@@ -24,31 +33,63 @@
 
   <div><%= f.label :password_confirmation %>
     <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+<div id="recipeint-wrapper">
+   <%= content_tag :section, :class => "" do %>
+  <% field_set_tag "Intended Recipient" do  -%>
+  <i>Important:  This is the email of your Practice Biller/manager, who will receive a billing summary of your conversations, and bill the conversations and/or store for record keeping.</i><br></br>
+    <%= f.fields_for :intended_recipients do |builder| %>
+      <%= render "intended_recipient_fields", :f => builder %>
+    <% end %>
 
-  <%= f.fields_for :intended_recipients do |builder| %>
-    <%= render "intended_recipient_fields", :f => builder %>
+    <div>
+      <%= link_to_add_fields "Add Intended Recipient", f, :intended_recipients %>
+    </div>
   <% end %>
-  <div>
-    <%= link_to_add_fields "Add Intended Recipent", f, :intended_recipients %>
+  <% end %>
   </div>
   <div>
-
+    <section>
+      <%= content_tag :section, :class => "" do %>
+  <% field_set_tag "Assign your potential charges" do  -%>
+      <i>FYI- You will now establish your charges for phone consultations with your patients.  Your patients may opt to listen to these charges when DocIt is obtaining consent for the phone consultation.  Practices vary in terms of charging patients.  Many practices charge all patients, some charge selectively, and some only use DocIt for record keeping.  Charging is at the discretion of the practice and providers.  DocIt is not a billing company is held harmless in all billing related matters.  As a general rule, most practices charge 100-200x Medicare rates.
+        Assuming a model 200x Medicare: <br>
+99441= $28 allowing .4 RVU<br>
+99442= $53 allowing .77 RVU <br>
+99443= $80 allowing 1.14 RVU<br>
+</i>
+<br>
+  <% i = 1 %>
+  <%= f.fields_for :consultation_charges do |builder| %>
+     <div class="fields">
+    <%= builder.hidden_field :consultation_type_id, value: i  %>
+    <%= builder.label :charges, ConsultationType.find(i).description %>
+    <%= builder.text_field :charges %>
+       <% i = i+1 %>
+  </div>
+    <% end %>
+  <% end %>
+     <% end %>
+    </section>
+  </div>
+  <div>
     <section>
       <%= content_tag :section, :class => "" do %>
         <% field_set_tag "Credit Card Detail for Monthly Subscription" do  -%>
+      
           <% fields_for @credit_card_detail do |cc| -%>
+      <i>This credit card will be charged $20/month for UNLIMITED phone consultations.  Storage is FREE.  You may cancel any time.</i><br></br>
             <div class="boxes">
               <div><%= cc.label :credit_card_type %>
                 <%= cc.select :credit_card_type, options_for_select(["Visa","MasterCard","Discover","Amex","Switch","Solo","Maestro"]), :include_blank => true %></div>
 
               <div><%= cc.label :credit_card_number %>
-                <%= cc.text_field :credit_card_number %></div>
+                <%= cc.text_field :credit_card_number, autocomplete: "off" %></div>
               <div><%= cc.label :exp_month %>
-                <%= cc.text_field :exp_month %></div>
+                <%= cc.text_field :exp_month, autocomplete: "off" %></div>
               <div><%= cc.label :exp_year %>
-                <%= cc.text_field :exp_year %></div>
+                <%= cc.text_field :exp_year, autocomplete: "off" %></div>
               <div><%= cc.label :cvv, 'CVV' %>
-                <%= cc.password_field :cvv2 %></div>
+                <%= cc.password_field :cvv2, autocomplete: "off" %></div>
 
             </div>
           <% end %>
@@ -56,10 +97,17 @@
       <% end %>
     </section>
   </div>
+ <div>
+   
+    <%= f.check_box :terms_of_service %> I Agree to the Docit <%= link_to 'End User Licence Agreements(EULA)', eula_url, :target => "_blank" %>
+    <br></br>
+ </div>
+
   <div><%= f.submit "Sign up" %></div>
 <% end %>
 <script>
   $("#user_mobile_number").intlTelInput();
+  $("#user_mobile_number_confirmation").intlTelInput();
 </script>
 
 <%= render "devise/shared/links" %>

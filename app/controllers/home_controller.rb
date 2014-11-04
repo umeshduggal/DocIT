@@ -2,7 +2,7 @@
 # and open the template in the editor.
 
 class HomeController < ApplicationController
-  skip_before_filter :authenticate_user!, :only => [:index]
+  skip_before_filter :authenticate_user!, :only => [:index, :eula]
   
   # base URL of this application
   BASE_URL = "http://b65f751.ngrok.com/home"
@@ -36,6 +36,10 @@ class HomeController < ApplicationController
     render :nothing
   end
 
+  def eula
+    render :layout => false
+  end
+  
   def hello_email
     to = IntendedRecipient.last
     UserMailer.send_registration_link(User.last,to).deliver

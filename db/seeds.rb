@@ -5,4 +5,8 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-Role.create([{ name: 'Admin' }, { name: 'Doctor' }, { name: 'IntendedRecipient' }])
+
+Rake::Task["Docit:seed:role"].invoke
+Rake::Task["Docit:seed:title"].invoke
+Rake::Task["Docit:seed:consultation_type"].invoke
+puts 'Finished seeding'

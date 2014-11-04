@@ -1,14 +1,13 @@
 class RegistrationsController < Devise::RegistrationsController
- 
-  
   def new
     @credit_card_detail = CreditCardDetail.new
     build_resource({})
     @validatable = devise_mapping.validatable?
     if @validatable
-    @minimum_password_length = resource_class.password_length.min
+      @minimum_password_length = resource_class.password_length.min
     end
     resource.intended_recipients.build
+    5.times { resource.consultation_charges.build }
     resource.assignments.build
     respond_with self.resource
   end
@@ -73,6 +72,8 @@ class RegistrationsController < Devise::RegistrationsController
   def update
     super
   end
+  
+
   
   protected
 

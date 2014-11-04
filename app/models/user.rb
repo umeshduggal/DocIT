@@ -5,11 +5,13 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable,  :validatable,:confirmable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :practice_name, :mobile_number, :verification_code, :verified, :parent_id, :intended_recipients_attributes, :assignments_attributes
+  attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :remember_me, :practice_name, :mobile_number, :verification_code, :verified, :parent_id,
+    :intended_recipients_attributes, :assignments_attributes, :title_id, :mobile_number_confirmation,:consultation_charges_attributes, :terms_of_service
 
   before_save :ensure_authentication_token
   validates :mobile_number, presence: true, :if => :check_user_role
-  validates :mobile_number, uniqueness: true, allow_nil: true
+  validates :mobile_number, confirmation: true
+  validates :terms_of_service, :acceptance => {:accept => true}
   has_many :intended_recipients, :dependent => :destroy
   accepts_nested_attributes_for :intended_recipients, :allow_destroy => true
   
@@ -20,6 +22,10 @@ class User < ActiveRecord::Base
         :reject_if => lambda {|a| a[:role_id].blank? },
           :allow_destroy => :true
   has_many :call_logs, :dependent => :destroy
+  has_many :consultation_charges, :dependent => :destroy
+  accepts_nested_attributes_for :consultation_charges, :allow_destroy => true
+  has_many :consultation_types, :through => :consultation_charges
+  belongs_to :title
   after_create :send_invitation_email
 
   def send_invitation_email
@@ -62,6 +68,10 @@ class User < ActiveRecord::Base
   def verified?
     return self.verified unless self.mobile_number.blank?
     true
+  end
+  
+  def name
+    [self.title.to_s, self.first_name, self.last_name].compact.join(" ") rescue '' 
   end
  
   private

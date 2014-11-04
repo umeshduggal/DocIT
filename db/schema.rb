@@ -11,13 +11,46 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140926105552) do
+ActiveRecord::Schema.define(:version => 20141103105959) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "user_id"
     t.integer  "role_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "call_logs", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "call_sid"
+    t.string   "patient_mobile_number"
+    t.string   "call_duration"
+    t.string   "patient_identifier_recording_sid"
+    t.string   "reason_for_consultation_recording_sid"
+    t.string   "conversation_recording_sid"
+    t.string   "conversation_call_status"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+    t.string   "conversation_call_duration"
+    t.string   "call_status"
+    t.datetime "time_of_conversation"
+    t.datetime "deleted_at"
+  end
+
+  create_table "consultation_charges", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "consultation_type_id"
+    t.string   "charges"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  create_table "consultation_types", :force => true do |t|
+    t.integer  "lower_limit"
+    t.integer  "upper_limit"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "intended_recipients", :force => true do |t|
@@ -63,8 +96,14 @@ ActiveRecord::Schema.define(:version => 20140926105552) do
     t.string   "email"
   end
 
+  create_table "titles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "users", :force => true do |t|
-    t.string   "name",                   :default => "",    :null => false
+    t.string   "first_name",             :default => "",    :null => false
     t.string   "email",                  :default => "",    :null => false
     t.string   "encrypted_password",     :default => "",    :null => false
     t.string   "reset_password_token"
@@ -83,6 +122,10 @@ ActiveRecord::Schema.define(:version => 20140926105552) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.string   "last_name"
+    t.integer  "title_id"
+    t.string   "confirm_mobile_number"
+    t.boolean  "terms_of_service"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
