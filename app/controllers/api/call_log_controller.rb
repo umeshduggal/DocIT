@@ -39,7 +39,7 @@ class Api::CallLogController < ApplicationController
     end
     render :status => 200,
       :json => { :success => true,
-      :info => "Record deleted sucessfully.",
+      :info => "Record deleted successfully.",
       :data => {} }
   end
   

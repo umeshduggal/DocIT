@@ -5,7 +5,7 @@ class Api::TwilioController < ApplicationController
   
   
   # base URL of this application
-  BASE_URL = "http://4d36bdb.ngrok.com/api/twilio"
+  BASE_URL = "http://69da127f.ngrok.com/api/twilio"
   # Use the Twilio REST API to initiate an outgoing call
   def makecall
     if !params['number']
@@ -47,7 +47,6 @@ class Api::TwilioController < ApplicationController
     #flash[:notice] = "Thank you, please hang up, Docit will call you back once your party is reached."
     #redirect_to root_url
   end
-  
   
   def patient_call
     @post_to = BASE_URL + "/language_selection?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}"
@@ -121,8 +120,19 @@ class Api::TwilioController < ApplicationController
     end
     
     if params['Digits'] == '1'
-      @post_to = BASE_URL + "/doctor_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
+      #@post_to = BASE_URL + "/doctor_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
       @patient_info_url = BASE_URL + "/patient_information?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
+      data = {
+        :from => TWILIO_CONFIG['from'],
+        :to => current_user.mobile_number,
+        :url => @patient_info_url
+      }
+      begin
+        client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
+        client.account.calls.create data
+      rescue StandardError => msg
+        Rails.logger.info "Error--- #{msg.inspect}"
+      end
       render :action => "doctor_call.xml.builder", :layout => false
       return
     end
@@ -150,17 +160,18 @@ class Api::TwilioController < ApplicationController
     call_log = CallLog.find(params[:call_id])
     call_log.update_attributes(:time_of_conversation=>Time.zone.now)
     @recording_url = call_log.patient_identifier_link
+    @post_to = BASE_URL + "/doctor_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
     render :action => "patient_information.xml.builder", :layout => false
   end
   
   def doctor_responce
     @language = params[:language]
-    CallLog.find(params[:call_id]).update_attributes(:conversation_recording_sid => params[:RecordingSid],:conversation_call_status =>params[:DialCallStatus],:conversation_call_duration=>params[:DialCallDuration])
+    CallLog.find(params[:call_id]).update_attributes(:conversation_recording_sid => params[:RecordingSid],:conversation_call_status =>params[:DialCallStatus],:conversation_call_duration=>params[:RecordingDuration])
     if ["busy", "no-answer", "failed", "canceled"].include? params[:DialCallStatus]
       render :action => "goodbye.xml.builder", :layout => false 
       return
     end
-    render :nothing => true
+    render :action => "patient_goodbye.xml.builder", :layout => false 
   end
   
   # TwiML response saying with the goodbye message. Twilio will detect no
@@ -173,25 +184,37 @@ class Api::TwilioController < ApplicationController
     call_log = CallLog.find(params[:call_id])
     call_log.update_attributes(:call_sid => params[:CallSid], :call_duration =>params[:CallDuration],:call_status => params[:CallStatus])
     if params[:attempt] == "first" && params[:CallStatus] == "no-answer"
-      sleep(2.minutes)
       Rails.logger.info "making second attempt"
-      redirect_to :action => 'makecall', :call_id=> params[:call_id], :user_email=> params[:user_email], :user_token=>params[:user_token], :number => params["To"], :attempt => "second"
-      return
-    end
-    if call_log.patient_identifier_recording_sid.nil? || call_log.reason_for_consultation_recording_sid.nil?
+      sleep(120)
+      Rails.logger.info "making second attempt"
+      attempt = "second"
       data = {
         :from => TWILIO_CONFIG['from'],
-        :to =>  current_user.mobile_number,
-        :url => BASE_URL + "/registration_info?user_email=#{params[:user_email]}&user_token=#{params[:user_token]}",
+        :to => params["To"],
+        :url => BASE_URL + "/patient_call?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}",
+        :StatusCallback => BASE_URL + "/call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&attempt=#{attempt}"
       }
       begin
         client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
         client.account.calls.create data
       rescue StandardError => msg
-        render :status => 401,
-          :json => { :success => false,
-          :info => "Error #{msg}",
-          :data => {} }
+        render :nothing => true 
+        return
+      end
+      render :nothing => true 
+      return
+    end
+    if call_log.patient_identifier_recording_sid.nil? || call_log.reason_for_consultation_recording_sid.nil?
+      begin
+        client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
+        response = client.account.sms.messages.create(
+          from: TWILIO_CONFIG['from'],
+          to: current_user.mobile_number,
+          body: "We are sorry but your party with number #{params['To']} is unavailable. A record will be made of your attempted call."
+        )
+      rescue StandardError => msg
+        Rails.logger.info "Error #{msg}"
+        render :nothing => true
         return
       end
     end
