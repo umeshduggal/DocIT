@@ -9,7 +9,9 @@ class User < ActiveRecord::Base
     :intended_recipients_attributes, :assignments_attributes, :title_id, :mobile_number_confirmation,:consultation_charges_attributes, :terms_of_service
 
   before_save :ensure_authentication_token
+  validates :first_name,:last_name, presence: true
   validates :mobile_number, presence: true, :if => :check_user_role
+  validates :mobile_number, length: {minimum: 10}, :allow_blank => true
   validates :mobile_number, confirmation: true
   validates :terms_of_service, :acceptance => {:accept => true}
   has_many :intended_recipients, :dependent => :destroy

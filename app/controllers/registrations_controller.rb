@@ -16,7 +16,17 @@ class RegistrationsController < Devise::RegistrationsController
     @credit_card_detail = CreditCardDetail.new(params[:credit_card_detail])
     build_resource(sign_up_params)   
     custom_errors = nil
+    
     if resource.valid? && @credit_card_detail.valid?
+      if params[:user][:mobile_number].length == 10
+        params[:user][:mobile_number] = "+1".concat(params[:user][:mobile_number])
+        params[:user][:mobile_number_confirmation] = "+1".concat(params[:user][:mobile_number_confirmation])
+      elsif params[:user][:mobile_number].length > 10
+        if params[:user][:mobile_number].start_with?("001")
+          params[:user][:mobile_number] = "+1".concat(params[:user][:mobile_number][-10,10])
+          params[:user][:mobile_number_confirmation] = "+1".concat(params[:user][:mobile_number_confirmation][-10,10])
+        end
+      end
       @subscription =  Subscription.where(:email => params[:user][:email], :completed => true).first
       if @subscription.blank?
         @client_profile, @subscription  = @credit_card_detail.create_payment_profile params

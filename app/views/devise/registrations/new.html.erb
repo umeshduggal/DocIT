@@ -7,10 +7,10 @@
     <%= builder.hidden_field :role_id, value: Role.find_by_name('Doctor').id %>
   <% end %>
 
-  <div><%= f.label :first_name %>
+  <div><%= f.label :first_name, :class => "required" %>
     <%= f.text_field :first_name, autofocus: true %></div>
 
-<div><%= f.label :last_name %>
+<div><%= f.label :last_name, :class => "required" %>
     <%= f.text_field :last_name%></div>
 
   <div><%= f.label :title %>
@@ -19,19 +19,19 @@
   <div><%= f.label :practice_name %>
     <%= f.text_field :practice_name %></div>
 
-  <div><%= f.label :mobile_number %><i>(Please enter valid number. This number will be verified later.)</i><br />
+  <div class="left_field"><%= f.label :mobile_number, :class => "required" %><i>(Please enter valid number. This number will be verified later.)</i><br />
     <%= f.text_field :mobile_number, :type=> "tel" %></div>
 
-<div><%= f.label :mobile_number_confirmation %>
+<div class="right_field label_height"><%= f.label :mobile_number_confirmation, "Confirm Mobile number", :class => "required" %>
     <%= f.text_field :mobile_number_confirmation,:type=> "tel" %></div>
 
-  <div><%= f.label :email %>
+  <div><%= f.label :email, :class => "required" %>
     <%= f.email_field :email %></div>
 
-  <div><%= f.label :password %> <% if @validatable %><i>(<%= @minimum_password_length %> characters minimum)</i><% end %><br />
+  <div><%= f.label :password, :class => "required" %> <% if @validatable %><i>(<%= @minimum_password_length %> characters minimum)</i><% end %><br />
     <%= f.password_field :password, autocomplete: "off" %></div>
 
-  <div><%= f.label :password_confirmation %>
+  <div><%= f.label :password_confirmation, :class => "required" %>
     <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
 <div id="recipeint-wrapper">
    <%= content_tag :section, :class => "" do %>
@@ -62,7 +62,7 @@
   <%= f.fields_for :consultation_charges do |builder| %>
      <div class="fields">
     <%= builder.hidden_field :consultation_type_id, value: i  %>
-    <%= builder.label :charges, ConsultationType.find(i).description %>
+    <%= builder.label :charges, ConsultationType.find(i).description, :class => "required" %>
     <%= builder.text_field :charges %>
        <% i = i+1 %>
   </div>
@@ -79,16 +79,16 @@
           <% fields_for @credit_card_detail do |cc| -%>
       <i>This credit card will be charged $20/month for UNLIMITED phone consultations.  Storage is FREE.  You may cancel any time.</i><br></br>
             <div class="boxes">
-              <div><%= cc.label :credit_card_type %>
+              <div><%= cc.label :credit_card_type, :class => "required" %>
                 <%= cc.select :credit_card_type, options_for_select(["Visa","MasterCard","Discover","Amex","Switch","Solo","Maestro"]), :include_blank => true %></div>
 
-              <div><%= cc.label :credit_card_number %>
+              <div><%= cc.label :credit_card_number, :class => "required" %>
                 <%= cc.text_field :credit_card_number, autocomplete: "off" %></div>
-              <div><%= cc.label :exp_month %>
+              <div><%= cc.label :exp_month, :class => "required" %>
                 <%= cc.text_field :exp_month, autocomplete: "off" %></div>
-              <div><%= cc.label :exp_year %>
+              <div><%= cc.label :exp_year, :class => "required" %>
                 <%= cc.text_field :exp_year, autocomplete: "off" %></div>
-              <div><%= cc.label :cvv, 'CVV' %>
+              <div><%= cc.label :cvv, 'CVV', :class => "required" %>
                 <%= cc.password_field :cvv2, autocomplete: "off" %></div>
 
             </div>
@@ -99,15 +99,15 @@
   </div>
  <div>
    
-    <%= f.check_box :terms_of_service %> I Agree to the Docit <%= link_to 'End User Licence Agreements(EULA)', eula_url, :target => "_blank" %>
+    <%= f.check_box :terms_of_service %> I Agree to the Docit <%= link_to 'End User Licence Agreements(EULA)*', eula_url, :target => "_blank" %>
     <br></br>
  </div>
 
   <div><%= f.submit "Sign up" %></div>
 <% end %>
 <script>
-  $("#user_mobile_number").intlTelInput();
-  $("#user_mobile_number_confirmation").intlTelInput();
+  //$("#user_mobile_number").intlTelInput();
+  //$("#user_mobile_number_confirmation").intlTelInput();
 </script>
 
 <%= render "devise/shared/links" %>

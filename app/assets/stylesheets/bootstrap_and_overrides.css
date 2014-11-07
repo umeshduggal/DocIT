@@ -18,3 +18,15 @@ clear: both;
 margin: 30px auto 50px auto;
 position: relative;
   }
+  label.required:after{content:"*"}
+  .left_field {
+      float: left;
+      width: 40%;
+  }
+  .right_field{
+      float: left;
+      width: 60%;
+  }
+  .label_height label{
+      margin-bottom: 25px;
+  }

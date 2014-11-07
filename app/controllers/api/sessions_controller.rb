@@ -9,7 +9,14 @@ class Api::SessionsController < Devise::SessionsController
   respond_to :json
   
   def create
-    resource = User.find_for_database_authentication(:mobile_number => "+"+params[:user][:mobile_number]) unless params[:user].nil?
+    if params[:user][:mobile_number].length == 10
+        params[:user][:mobile_number] = "+1".concat(params[:user][:mobile_number])
+    elsif params[:user][:mobile_number].length > 10
+      if params[:user][:mobile_number].start_with?("001")
+        params[:user][:mobile_number] = "+1".concat(params[:user][:mobile_number][-10,10])
+      end
+    end
+    resource = User.find_for_database_authentication(:mobile_number => params[:user][:mobile_number]) unless params[:user].nil?
     return failure unless resource
 
     #warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#failure")
