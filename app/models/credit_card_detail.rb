@@ -7,17 +7,17 @@ class CreditCardDetail  < ActiveRecord::Base
   def self.column(name, sql_type = nil, default = nil, null = true)
     columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
   end
-  attr_accessible :credit_card_type,:credit_card_number,:exp_month,:exp_year, :cvv2
+  attr_accessible :credit_card_type,:credit_card_number,:exp_month,:exp_year, :CVV
   column :credit_card_type, :string
   column :credit_card_number, :string
   column :exp_month, :integer
   column :exp_year, :integer
-  column :cvv2, :integer
+  column :CVV, :integer
   validates :credit_card_type, presence: true
   validates :credit_card_number, presence: true
   validates :exp_month, presence: true
   validates :exp_year, presence: true
-  validates :cvv2, presence: true
+  validates :CVV, presence: true
   validates :credit_card_number, numericality: { only_integer: true }
   
   def create_payment_profile options
