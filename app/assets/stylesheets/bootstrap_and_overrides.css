@@ -33,3 +33,4 @@ position: relative;
   .label_height label{
       margin-bottom: 25px;
   }
+  label{cursor: default;}

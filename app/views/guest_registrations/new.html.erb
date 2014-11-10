@@ -14,8 +14,15 @@
   <div><%= f.label :email %>
     <%= f.email_field :email, value: @IntendedRecipient.email, disabled: true %></div>
 
-  <div><%= f.label :name %>
-    <%= f.text_field :name, autofocus: true %></div>
+ <div><%= f.label :first_name, :class => "required" %>
+    <%= f.text_field :first_name, autofocus: true %></div>
+
+<div><%= f.label :last_name, :class => "required" %>
+    <%= f.text_field :last_name%></div>
+
+  <div><%= f.label :title %>
+  <%= f.collection_select(:title_id, Title.all, :id, :name, :prompt => 'Please select title') %>
+  </div>
 
   <div><%= f.label :practice_name %>
     <%= f.text_field :practice_name %></div>
