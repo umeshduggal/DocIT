@@ -146,18 +146,12 @@ class Api::TwilioController < ApplicationController
   def charges_responce
     @language = params[:language]
     if params['Digits'] == '1'
-      redirect_to :action => 'patient_ready_for_call', :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
+      redirect_to :action => 'patient_responce', :Digits => params['Digits'], :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
       return
     end
     
     if params['Digits'] != '1'
-      @charges = []
-      current_user.consultation_charges.each do |c| 
-        @charges[c.consultation_type_id] = c.charges
-      end
-      @charges = [0,1,2,3,4,5] if @charges.length == 0
-      @post_to = BASE_URL + "/charges_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
-      render :action => "call_charges.xml.builder", :layout => false
+      redirect_to :action => 'patient_responce', :Digits => 5, :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
       return
     end
   end
