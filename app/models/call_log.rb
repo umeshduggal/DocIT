@@ -23,4 +23,8 @@ class CallLog < ActiveRecord::Base
     self.time_of_conversation.strftime("%Y-%m-%d %H:%M:%S") rescue nil
   end
   
+  def updated_at
+    super.strftime("%Y-%m-%d %H:%M:%S") rescue super
+  end
+  
 end
