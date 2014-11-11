@@ -120,12 +120,14 @@ class Api::TwilioController < ApplicationController
     end
     
     if params['Digits'] == '1'
-      #@post_to = BASE_URL + "/doctor_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
+      @post_to = BASE_URL + "/doctor_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
       @patient_info_url = BASE_URL + "/patient_information?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
+      @doctor_call_status = BASE_URL + "/doctor_call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&patient_number=#{params['Called']}"
       data = {
         :from => TWILIO_CONFIG['from'],
         :to => current_user.mobile_number,
-        :url => @patient_info_url
+        :url => @patient_info_url,
+        :StatusCallback => @doctor_call_status
       }
       begin
         client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
@@ -170,13 +172,43 @@ class Api::TwilioController < ApplicationController
   end
   
   def doctor_responce
-    @language = params[:language]
+    @language = params[:language] 
     CallLog.find(params[:call_id]).update_attributes(:conversation_recording_sid => params[:RecordingSid],:conversation_call_status =>params[:DialCallStatus],:conversation_call_duration=>params[:RecordingDuration])
+    
     if ["busy", "no-answer", "failed", "canceled"].include? params[:DialCallStatus]
       render :action => "goodbye.xml.builder", :layout => false 
       return
     end
     render :action => "patient_goodbye.xml.builder", :layout => false 
+  end
+  
+  def doctor_call_status
+    @language = params[:language]
+    if ["busy", "no-answer", "failed", "canceled"].include? params[:CallStatus]
+      CallLog.find(params[:call_id]).update_attributes(:conversation_call_status =>params[:CallStatus])
+      client = Twilio::REST::Client.new TWILIO_CONFIG['sid'], TWILIO_CONFIG['token']
+      # Loop over conferences and print out a property for each one
+      client.account.conferences.list({
+          :status => "in-progress",
+          :friendly_name => current_user.mobile_number}).each do |conference|
+        conference.participants.list.each do |participant|
+          Rails.logger.info participant.inspect
+          participant.delete
+        end
+      end
+      unless params[:patient_number].start_with?("+")
+        params[:patient_number] = "+"+params[:patient_number]
+      end
+
+      response = client.account.sms.messages.create(
+        from: TWILIO_CONFIG['from'],
+        to: params[:patient_number],
+        body: "We are sorry but #{current_user.name} is no longer able to pick up the phone, we will leave a message. Goodbye."
+      ) 
+      #render :action => "goodbye.xml.builder", :layout => false 
+    end
+    render :nothing => true 
+    return
   end
   
   # TwiML response saying with the goodbye message. Twilio will detect no

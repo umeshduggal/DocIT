@@ -16,10 +16,10 @@
       padding-top: 15px;
   }
   #wrapper{
-      border-radius: 6px;
-clear: both;
-margin: 30px auto 50px auto;
-position: relative;
+    border-radius: 6px;
+    clear: both;
+    margin: 30px auto 50px auto;
+    position: relative;
   }
   label.required:after{content:"*"}
   .left_field {
@@ -33,4 +33,10 @@ position: relative;
   .label_height label{
       margin-bottom: 25px;
   }
-  label{cursor: default;}
+  label {
+      cursor: default;
+  }
+  .doller_sign {
+     margin-left: 5px;
+     font-size: large;
+  }
