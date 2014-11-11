@@ -95,10 +95,19 @@ class Api::TwilioController < ApplicationController
   end
   
   def patient_ready_for_call
+    if params[:repeat]
+      repeat = params[:repeat].to_i + 1
+    else
+      repeat = 1
+    end
     @language = params[:language]
     @post_to = BASE_URL + "/patient_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
-    @redirect_to = BASE_URL + "/patient_ready_for_call?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
-    render :action => "patient_ready_for_call.xml.builder", :layout => false
+    @redirect_to = BASE_URL + "/patient_ready_for_call?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&repeat=#{repeat}"
+    if repeat <= 5
+      render :action => "patient_ready_for_call.xml.builder", :layout => false
+    else
+      render :action => "hangup.xml.builder", :layout => false
+    end
   end
   
   def patient_responce
