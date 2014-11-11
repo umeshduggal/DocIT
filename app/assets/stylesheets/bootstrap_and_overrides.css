@@ -40,3 +40,10 @@
      margin-left: 5px;
      font-size: large;
   }
+  #field_container {
+      float: left;
+      width: 100%;
+  }
+  #field_container .field_with_errors {
+      float: left;
+  }

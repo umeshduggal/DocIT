@@ -17,8 +17,16 @@ class CreditCardDetail  < ActiveRecord::Base
   validates :credit_card_number, presence: true
   validates :exp_month, presence: true
   validates :exp_year, presence: true
-  validates :CVV, presence: true
+  #validates :CVV, presence: true
   validates :credit_card_number, numericality: { only_integer: true }
+  validate :validate_cvv
+
+    def validate_cvv
+      if self.CVV.blank? || self.CVV.nil?
+        errors[:base] << "CVV can't be blank"
+      end
+    end
+  
   
   def create_payment_profile options
     @api = PayPal::SDK::Merchant::API.new
@@ -65,9 +73,9 @@ class CreditCardDetail  < ActiveRecord::Base
         :completed => true, :email => options[:user][:email], :start_date=> Time.now, :expire_date => Time.now + 1.month)
       [@create_recurring_payments_profile_response.CreateRecurringPaymentsProfileResponseDetails, @subscription]
     else
-      Rails.logger.info "@create_recurring_payments_profile_response.Errors"
+      Rails.logger.info "create_recurring_payments_profile_response.Errors"
       Rails.logger.info @create_recurring_payments_profile_response.Errors.inspect
-      Rails.logger.info "@create_recurring_payments_profile_response.Errors"
+      Rails.logger.info "create_recurring_payments_profile_response.Errors"
       @subscription = Subscription.create!(:credit_card_number => options[:credit_card_detail][:credit_card_number].last(4),:token => @create_recurring_payments_profile_response.CorrelationID,
         :canceled => true, :email => options[:user][:email])
       [@create_recurring_payments_profile_response.Errors, @subscription]

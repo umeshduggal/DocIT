@@ -20,10 +20,10 @@
     <%= f.text_field :practice_name %></div>
 
   <div class="left_field"><%= f.label :mobile_number, :class => "required" %><i>(Please enter valid number. This number will be verified later.)</i><br />
-    <%= f.text_field :mobile_number, :type=> "tel" %></div>
+    <%= f.text_field :mobile_number, :type=> "tel",:maxlength => "14" %></div>
 
 <div class="right_field label_height"><%= f.label :mobile_number_confirmation, "Confirm Mobile number", :class => "required" %>
-    <%= f.text_field :mobile_number_confirmation,:type=> "tel" %></div>
+    <%= f.text_field :mobile_number_confirmation,:type=> "tel",:maxlength => "14" %></div>
 
   <div><%= f.label :email, :class => "required" %>
     <%= f.email_field :email %></div>
@@ -63,7 +63,9 @@
      <div class="fields">
     <%= builder.hidden_field :consultation_type_id, value: i  %>
     <%= builder.label :charges, ConsultationType.find(i).description, :class => "required" %>
+       <div id="field_container">
     <%= builder.text_field :charges %><span class="doller_sign">$</span>
+    </div>
        <% i = i+1 %>
   </div>
     <% end %>
@@ -98,8 +100,8 @@
     </section>
   </div>
  <div>
-   
-    <%= f.check_box :terms_of_service %> I Agree to the Docit <%= link_to 'End User Licence Agreements(EULA)*', eula_url, :target => "_blank" %>
+   <div id="field_container">
+<%= f.check_box :terms_of_service %> &nbsp;I Agree to the Docit <%= link_to 'End User Licence Agreements(EULA)*', eula_url, :target => "_blank" %></div>
     <br></br>
  </div>
 
