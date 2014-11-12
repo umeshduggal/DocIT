@@ -40,13 +40,13 @@ DocIT::Application.configure do
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
-    port: 587,
-    domain: "gmail.com",
+    address: "smtp.live.com",
+    port: 25,
+    domain: "live.com",
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: "docitinfo@gmail.com",
-    password: "docit@123"
+    user_name: "docitamerica@outlook.com",
+    password: "duggal@123"
     }
   
 end
