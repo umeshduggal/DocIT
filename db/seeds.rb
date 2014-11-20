@@ -9,4 +9,6 @@
 Rake::Task["Docit:seed:role"].invoke
 Rake::Task["Docit:seed:title"].invoke
 Rake::Task["Docit:seed:consultation_type"].invoke
+Rake::Task["Docit:seed:create_admin_user"].invoke
+
 puts 'Finished seeding'

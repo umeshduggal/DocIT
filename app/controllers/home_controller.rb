@@ -4,8 +4,6 @@
 class HomeController < ApplicationController
   skip_before_filter :authenticate_user!, :only => [:index, :eula]
   
-  # base URL of this application
-  BASE_URL = "http://b65f751.ngrok.com/home"
   def index
     
   end
@@ -21,19 +19,12 @@ class HomeController < ApplicationController
     redirect_to root_url
   end
   
-  
-  
-  
-  def call_logs
-    client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
-    calls = client.account.calls.list
-    begin
-      calls.each do |call|
-        puts call.sid + "\t" + call.from + "\t" + call.to
-      end
-      calls = calls.next_page
-    end while not calls.empty?
-    render :nothing
+  def manage_billing_manager
+    if current_user.has_role? :doctor
+      @managers = current_user.intended_recipients
+      
+    end
+    
   end
 
   def eula

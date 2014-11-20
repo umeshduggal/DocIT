@@ -1,0 +1,26 @@
+<%= form_for(@intended_recipient) do |f| %>
+  <% if @intended_recipient.errors.any? %>
+    <div id="error_explanation">
+     <ul>
+      <% @intended_recipient.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="fields">
+  <%= f.hidden_field :user_id, value: current_user.id %>
+  <div class="left_field">
+  <%= f.label :email,"Intended Recipient Email", :class => "required" %>
+  <%= f.email_field :email %>
+  </div>
+  <div class="right_field">
+  <%= f.label :email_confirmation, "Confirm Intended Recipient Email", :class => "required" %>
+  <%= f.email_field :email_confirmation %>
+  </div>
+
+</div>
+  <div class="actions">
+    <%= f.submit :class=>"btn"%>
+  </div>
+<% end %>

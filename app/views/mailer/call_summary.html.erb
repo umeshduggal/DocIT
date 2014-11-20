@@ -1,29 +1,33 @@
-<% if current_user.has_role? :intended_recipient %>
-  <h2>List of Call Log for <%= current_user.parent.name %>, <%= current_user.parent.practice_name %></h2>
-<% else %>
-  <h2>List of Call Log for <%= current_user.name %>, <%= current_user.practice_name %></h2>
-<% end %>
+<p>Dear <%= @to.name %> </p>
 
-
+<p>Please find below the billing summary for yesterday:</p>
+<br></br>
+<h2>List of Call Logs for <%= @user.name %>, <%= @user.practice_name %></h2>
 <table class="table table-hover table-condensed table-bordered table-striped">
   <thead>
     <tr>
       <th>Patient Number</th>
+      <th>Billable Amount ($)</th>
       <th>Date & Time of conversation</th>
-      <th>Duration of conversation(sec.)</th>
-       <th>Billable Amount($)</th>
+      <th>Duration of conversation (Seconds)</th>
       <th>Patient Identifier </th>
       <th>Reason For Consultation</th>
       <th>Recording of the conversation</th>
       </tr>
   </thead>
   <tbody>
-    <% @call_logs.each do |call_log| %>
+    <%
+    total_duration = 0
+    total_amount = 0
+    @call_logs.each do |call_log| 
+    total_duration = total_duration + call_log.conversation_call_duration.to_i
+    total_amount = total_amount + (call_log.billing_summary.billable_ammount.to_i rescue 0)
+    %>
       <tr>
         <td><%= call_log.patient_mobile_number %></td>
+        <td><%= call_log.billing_summary.billable_ammount rescue ''%></td>
         <td><%= call_log.conversation_datetime %></td>
         <td><%= call_log.conversation_call_duration %></td>
-        <td><%= call_log.billing_summary.billable_ammount rescue ''%></td>
         <td><% unless call_log.patient_identifier_link == '' %>
   <%= link_to 'link to MP3', call_log.patient_identifier_link, :target =>"_blank" %><%  end %></td>
         <td><% unless call_log.reason_for_consultation_link == '' %> 
@@ -32,7 +36,12 @@
   <%= link_to 'link to MP3', call_log.conversation_recording_link, :target =>"_blank" %><%  end %></td>
       </tr>
     <% end %>
-       <%= will_paginate @call_logs unless @call_logs.blank? %>
   </tbody>
 </table>
 
+<p>Total Call Duration: <%= total_duration %></p>
+<p>Total Billable Amount: <%= total_amount %></p>
+<br></br>
+<p>To view call logs please follow the link below:</p>
+
+<p><%= link_to 'Call Logs on Docit Portal', call_logs_url %></p>

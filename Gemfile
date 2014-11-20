@@ -27,6 +27,7 @@ gem 'thin'
 gem 'paypal-sdk-merchant'
 gem 'cancan'
 gem 'paranoia', '~> 1.0'
+gem 'will_paginate', '~> 3.0.6'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

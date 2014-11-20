@@ -7,7 +7,7 @@ DocIT::Application.routes.draw do
 #  match 'twilio/voice' => 'twilio#voice', :via => :post
 #  match 'twilio/make_call' => 'twilio#make_call', :via => :post
   
-  match 'home/verify' => 'home#number_verification', :via => :post
+  
   
   namespace :api do
     devise_scope :user do
@@ -24,8 +24,13 @@ devise_scope :user do
  end
  
   devise_for :users, :controllers => {:registrations => "registrations"}
+  
   match '/eula' => 'home#eula', :via => :get
-
+  match 'home/verify' => 'home#number_verification', :via => :post
+  match 'billing_managers' => 'intended_recipients#index', :via => :get, :as => :billing_manager
+  match 'billing_summaries' => 'billing_summaries#index', :via => :get, :as => :billing_summaries
+  match 'user/:id' => 'intended_recipients#user_action', :via => :post, :as => :user_action
+  resources :intended_recipients
   match '/call_logs' => 'call_log#index', :via => :get
 #  match 'home/makecall' => 'home#makecall', :via => :post
 #  match 'home/reminder' => 'home#reminder', :via => :post

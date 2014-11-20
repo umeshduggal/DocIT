@@ -9,6 +9,10 @@
    <div><%= f.label :last_name, :class => "required" %>
   <%= f.text_field :last_name, autofocus: true %></div>
 
+<div><%= f.label :title %>
+  <%= f.collection_select(:title_id, Title.all, :id, :name, :prompt => 'Please select title') %>
+  </div>
+
  <div><%= f.label :practice_name %>
   <%= f.text_field :practice_name %></div>
 

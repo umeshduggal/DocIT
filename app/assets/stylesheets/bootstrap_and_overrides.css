@@ -7,13 +7,14 @@
   */
   body { padding-top: 60px; }
   #logo{
-      width:100px;
+      width:130px;
   }
   #logo img{
-      width:100px;
+      width:130px;
   }
   #menu-menu{
-      padding-top: 15px;
+      padding-top: 35px;
+        padding-left: 30px;
   }
   #wrapper{
     border-radius: 6px;
@@ -46,4 +47,7 @@
   }
   #field_container .field_with_errors {
       float: left;
+  }
+  #add-new{
+      margin-bottom: 10px;
   }

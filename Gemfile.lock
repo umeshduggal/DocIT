@@ -132,6 +132,7 @@ GEM
       json (>= 1.8.0)
     warden (1.2.3)
       rack (>= 1.0)
+    will_paginate (3.0.7)
     xml-simple (1.1.4)
 
 PLATFORMS
@@ -151,3 +152,4 @@ DEPENDENCIES
   twilio-ruby
   twitter-bootstrap-rails
   uglifier (>= 1.0.3)
+  will_paginate (~> 3.0.6)

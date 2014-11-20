@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable :trackable,
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable,  :validatable,:confirmable
+         :recoverable, :rememberable,  :validatable, :confirmable, :lockable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :remember_me, :practice_name, :mobile_number, :verification_code, :verified, :parent_id,
@@ -28,18 +28,8 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :consultation_charges, :allow_destroy => true
   has_many :consultation_types, :through => :consultation_charges
   belongs_to :title
-  after_create :send_invitation_email
-
-  def send_invitation_email
-    self.assignments.each do |a|
-        if a.has_role? :doctor
-          self.intended_recipients.each do |ir| 
-            u = UserMailer.send_registration_link(self, ir).deliver
-            Rails.logger.info u.inspect
-          end
-      end
-    end
-  end
+  belongs_to :parent, :class_name => "User" 
+ 
   
   def check_user_role
     self.assignments.each do |a|

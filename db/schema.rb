@@ -11,13 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141103105959) do
+ActiveRecord::Schema.define(:version => 20141120102624) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "user_id"
     t.integer  "role_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "billing_summaries", :force => true do |t|
+    t.integer  "call_log_id"
+    t.string   "billable_ammount"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "datetime_constant"
   end
 
   create_table "call_logs", :force => true do |t|
@@ -124,7 +132,11 @@ ActiveRecord::Schema.define(:version => 20141103105959) do
     t.datetime "confirmation_sent_at"
     t.string   "last_name"
     t.integer  "title_id"
+    t.string   "confirm_mobile_number"
     t.boolean  "terms_of_service"
+    t.integer  "failed_attempts",        :default => 0
+    t.string   "unlock_token"
+    t.datetime "locked_at"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
