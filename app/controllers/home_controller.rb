@@ -5,11 +5,9 @@ class HomeController < ApplicationController
   skip_before_filter :authenticate_user!, :only => [:index, :eula, :contact_us, :videos, :about_us,:send_email]
   
   def index
-    
   end
   
   def contact_us
-    
   end
   
   def about_us
@@ -35,7 +33,7 @@ class HomeController < ApplicationController
   end
   
   def send_mail
-    to = "umeshduggal1@gmail.com"
+    to = "maniksethi2312@gmail.com"
     UserMailer.send_feedback(to,params).deliver
     flash[:notice] = 'Form submitted successfully.'
     redirect_to :back
