@@ -38,4 +38,6 @@ $( document ).ready(function() {
   {
       $('.remove_link').first().hide();
   }
+  //added quick fix - bootstrap dropdown not working on testing server
+  $('.dropdown-toggle').dropdown()
 });
