@@ -2,10 +2,20 @@
 # and open the template in the editor.
 
 class HomeController < ApplicationController
-  skip_before_filter :authenticate_user!, :only => [:index, :eula]
+  skip_before_filter :authenticate_user!, :only => [:index, :eula, :contact_us, :videos, :about_us,:send_email]
   
   def index
     
+  end
+  
+  def contact_us
+    
+  end
+  
+  def about_us
+  end
+  
+  def videos
   end
   
   def number_verification
@@ -18,23 +28,17 @@ class HomeController < ApplicationController
     end
     redirect_to root_url
   end
-  
-  def manage_billing_manager
-    if current_user.has_role? :doctor
-      @managers = current_user.intended_recipients
-      
-    end
-    
-  end
+
 
   def eula
     render :layout => false
   end
   
-  def hello_email
-    to = IntendedRecipient.last
-    UserMailer.send_registration_link(User.last,to).deliver
-    render :nothing => true
+  def send_mail
+    to = "umeshduggal1@gmail.com"
+    UserMailer.send_feedback(to,params).deliver
+    flash[:notice] = 'Form submitted successfully.'
+    redirect_to :back
   end
   
 end

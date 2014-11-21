@@ -23,6 +23,13 @@ class UserMailer < ActionMailer::Base
     end 
   end
   
+  def send_feedback(to, params, content_type = 'text/html')
+    @to = to
+    @params = params
+    @content_type = content_type
+    mail(:to => "#{to}", :subject => params[:subject], template_path: 'mailer', template_name: 'feedback_form')
+  end
+  
 #  
 #  def metrofax_email_notification(fax, status, content_type = 'text/html')
 #    @content_type        = content_type

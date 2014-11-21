@@ -1,0 +1,56 @@
+<section style="margin-left: 10px;">
+  <h1>Contact Us </h1>
+  <div class="container">
+    <div class="row-fluid">
+      <div class="span6" style="padding-right:20px; border-right: 1px solid #ccc;">
+        <%= form_tag(send_mail_path, :id=>"contact-form") do %>
+        <%= hidden_field_tag :subject, "Feedback" %>
+        <%= hidden_field_tag :contact_us, true %>
+            <div class="form-group">
+                <%= label_tag 'name', 'Name', :class =>"required" %>
+                <%= text_field_tag 'name', nil, class: 'form-control text-width', placeholder: 'Your Name' %>
+            </div>
+           <div class="form-group">
+               <%= label_tag 'email', 'Email', :class =>"required" %>
+               <%= email_field_tag 'email', nil, class: 'form-control text-width', placeholder: 'Your Email Address' %>
+           </div>
+           <div class="form-group">
+               <%= label_tag 'message', 'Message', :class =>"required" %>
+               <%= text_area_tag 'message', nil, class: 'form-control text-width', rows: 4, placeholder: 'Comments...' %>
+           </div>
+        <div class="form-group button-margin">
+              <%= submit_tag nil, class: 'btn btn-default btn-about pull-right' %>
+           </div>
+           
+       <% end %>
+        </div>
+
+        <div class="span6">
+          <div><b><abbr title="Phone">Phone:</abbr></b><p> +1(123) 456-7890</p></div>
+            <div><b><abbr title="Fax">Fax:</abbr></b><p> +1(123) 456-7890</p></div>
+            <address>
+            <strong>Docit, Inc.</strong><br>
+            123 Lorem ipsum, Suite 600<br>
+            San Francisco, CA 94107<br>
+            <abbr title="Phone">P:</abbr> (123) 456-7890
+        </address>
+
+        </div>
+    </div>
+</div>
+</section>
+  
+<script type="text/javascript">
+  $(document).ready(function () {
+  $("#contact-form").validate({
+    debug: true,
+    rules: {
+    "email": {required: true, email: true},
+    "name": {required: true},
+    //"contact[phone]": {required: true, phone: true}
+    "message": {required: true}
+    }
+    , submitHandler: function(form) { form.submit(); } 
+  });
+});
+</script>

@@ -1,0 +1,51 @@
+<section style="margin-left: 10px;">
+  <h1>About Us </h1>
+  <div class="container">
+    <div class="row-fluid">
+      <div class="span6" style="padding-right:20px; border-right: 1px solid #ccc;">
+     <p>
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+  <p>
+    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+        </div>
+
+        <div class="span6">
+            <div class="container-content">
+    
+        <%= form_tag(send_mail_path, :id=>"contact-form") do %>
+              <%= hidden_field_tag :subject, "Request for a DocIt representative" %>
+            <div class="form-group">
+                <%= label_tag 'name', 'Name', :class =>"required" %>
+                <%= text_field_tag 'name', nil, class: 'form-control text-width', placeholder: 'Your Name' %>
+            </div>
+           <div class="form-group">
+               <%= label_tag 'email', 'Email', :class =>"required" %>
+               <%= email_field_tag 'email', nil, class: 'form-control text-width', placeholder: 'Your Email Address' %>
+           </div>
+           <div class="form-group">
+               <%= label_tag 'message', 'Message', :class =>"required" %>
+               <%= text_area_tag 'message', nil, class: 'form-control text-width', rows: 4, placeholder: 'Comments...' %>
+           </div>
+              <div class="form-group button-margin">
+                <%= submit_tag "Request for a DocIt representative", class: 'btn btn-default btn-about pull-right' %>
+              </div>
+       <% end %>
+  </div>
+        </div>
+    </div>
+</div>
+</section>
+  
+<script type="text/javascript">
+  $(document).ready(function () {
+  $("#contact-form").validate({
+    debug: true,
+    rules: {
+    "email": {required: true, email: true},
+    "name": {required: true},
+    "message": {required: true}
+    }
+    , submitHandler: function(form) { form.submit(); } 
+  });
+});
+</script>

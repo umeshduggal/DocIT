@@ -1,0 +1,15 @@
+<p>Dear Administrator</p>
+<% if @params[:contact_us] %>
+<p><%= @params[:name] %> has contacted you.</p>
+<% else %>
+<p><%= @params[:name] %> has requested for a Docit representative.</p>
+<% end %>
+
+<br></br>
+<p><b>Name:</b> <%= @params[:name] %></p>
+<p><b>Email:</b> <%= @params[:email] %></p>
+<p><b>Message:</b> <%= @params[:message].html_safe %></p>
+
+<br></br>
+<p>Thank you,</p>
+<p>Docit</p>
