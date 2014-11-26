@@ -29,11 +29,11 @@
         <td><%= call_log.conversation_datetime %></td>
         <td style="text-align: center"><%= call_log.conversation_call_duration %></td>
         <td><% unless call_log.patient_identifier_link == '' %>
-  <%= link_to image_tag(attachments['sound.png'].url, :alt=>"Link to MP3", :border => 0, :width=>"25px", :height=>"25px"), call_log.patient_identifier_link, :target =>"_blank" %><%  end %></td>
+  <%= link_to 'link to MP3', call_log.patient_identifier_link, :target =>"_blank" %><%  end %></td>
         <td><% unless call_log.reason_for_consultation_link == '' %> 
-  <%= link_to image_tag(attachments['sound.png'].url, :alt=>"Link to MP3", :border => 0, :width=>"25px", :height=>"25px"), call_log.reason_for_consultation_link, :target =>"_blank" %><%  end %></td>
+  <%= link_to 'link to MP3', call_log.reason_for_consultation_link, :target =>"_blank" %><%  end %></td>
         <td><% unless call_log.conversation_recording_link == '' %>
-  <%= link_to image_tag(attachments['sound.png'].url, :alt=>"Link to MP3", :border => 0, :width=>"25px", :height=>"25px"), call_log.conversation_recording_link, :target =>"_blank" %><%  end %></td>
+  <%= link_to 'link to MP3', call_log.conversation_recording_link, :target =>"_blank" %><%  end %></td>
       </tr>
     <% end %>
   </tbody>
