@@ -21,13 +21,13 @@
     total_amount = 0
     @call_logs.each do |call_log| 
     total_duration = total_duration + call_log.conversation_call_duration.to_i
-    total_amount = total_amount + (call_log.billing_summary.billable_ammount.to_i rescue 0)
+    total_amount = total_amount + (call_log.billing_summary.billable_ammount.to_d rescue 0)
     %>
       <tr>
         <td><%= call_log.patient_mobile_number %></td>
-        <td><%= call_log.billing_summary.billable_ammount rescue ''%></td>
+        <td style="text-align: center"><%= call_log.billing_summary.billable_ammount rescue ''%></td>
         <td><%= call_log.conversation_datetime %></td>
-        <td><%= call_log.conversation_call_duration %></td>
+        <td style="text-align: center"><%= call_log.conversation_call_duration %></td>
         <td><% unless call_log.patient_identifier_link == '' %>
   <%= link_to 'link to MP3', call_log.patient_identifier_link, :target =>"_blank" %><%  end %></td>
         <td><% unless call_log.reason_for_consultation_link == '' %> 
@@ -39,9 +39,11 @@
   </tbody>
 </table>
 
-<p>Total Call Duration: <%= total_duration %></p>
-<p>Total Billable Amount: <%= total_amount %></p>
+<!--<p>Total Call Duration: <%= total_duration %></p>
+<p>Total Billable Amount: <%= total_amount %></p>-->
+<p>Total Call Duration: <%= Time.at(total_duration).utc.strftime("%H:%M:%S") rescue '' %></p>
+<p>Total Billable Amount: <%= number_to_currency(total_amount) rescue '' %></p>
 <br></br>
 <p>To view call logs please follow the link below:</p>
-
+ 
 <p><%= link_to 'Call Logs on Docit Portal', call_logs_url %></p>
