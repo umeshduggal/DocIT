@@ -22,8 +22,8 @@
       <tr>
         <td><%= call_log.patient_mobile_number %></td>
         <td><%= call_log.conversation_datetime %></td>
-        <td><%= call_log.conversation_call_duration %></td>
-        <td><%= call_log.billing_summary.billable_ammount rescue ''%></td>
+        <td style="text-align: center"><%= call_log.conversation_call_duration %></td>
+        <td style="text-align: center"><%= call_log.billing_summary.billable_ammount rescue ''%></td>
         <td><% unless call_log.patient_identifier_link == '' %>
   <%= link_to 'link to MP3', call_log.patient_identifier_link, :target =>"_blank" %><%  end %></td>
         <td><% unless call_log.reason_for_consultation_link == '' %> 
