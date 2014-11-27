@@ -33,7 +33,7 @@ class HomeController < ApplicationController
   end
   
   def send_mail
-    to = "maniksethi2312@gmail.com"
+    to = Rails.application.config.super_admin_mail_id;
     UserMailer.send_feedback(to,params).deliver
     flash[:notice] = 'Form submitted successfully.'
     redirect_to :back
