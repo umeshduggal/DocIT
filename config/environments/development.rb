@@ -39,6 +39,8 @@ DocIT::Application.configure do
   
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   
+  config.super_admin_mail_id = "maniksethi2312@gmail.com"
+  
   config.action_mailer.smtp_settings = {
     address: "smtp.live.com",
     port: 25,
