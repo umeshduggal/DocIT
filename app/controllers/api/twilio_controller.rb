@@ -5,7 +5,7 @@ class Api::TwilioController < ApplicationController
   
   
   # base URL of this application
-  BASE_URL = "http://69da127f.ngrok.com/api/twilio"
+  BASE_URL = "http://129f2b9a.ngrok.com/api/twilio"
   # Use the Twilio REST API to initiate an outgoing call
   def makecall
     if !params['number']
@@ -28,6 +28,7 @@ class Api::TwilioController < ApplicationController
       :from => TWILIO_CONFIG['from'],
       :to => params['number'],
       :url => BASE_URL + "/patient_call?call_id=#{call_id}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}",
+      :IfMachine => 'Hangup',
       :StatusCallback => BASE_URL + "/call_status?call_id=#{call_id}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&attempt=#{attempt}"
     }
     begin
@@ -55,6 +56,10 @@ class Api::TwilioController < ApplicationController
   end
   
   def language_selection
+    if params['Digits'] == '2'
+      redirect_to :action => 'patient_identifier', :call_id => params[:call_id], :user_email=> params[:user_email],:user_token=> params[:user_token], :Digits=> "2" 
+      return
+    end
     if params['Digits'] == '1'
       @post_to = BASE_URL + "/patient_identifier?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}"
       @redirect_to = BASE_URL + "/language_selection?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&Digits=1"
@@ -136,6 +141,7 @@ class Api::TwilioController < ApplicationController
         :from => TWILIO_CONFIG['from'],
         :to => current_user.mobile_number,
         :url => @patient_info_url,
+        :IfMachine => 'Hangup',
         :StatusCallback => @doctor_call_status
       }
       begin
@@ -223,7 +229,7 @@ class Api::TwilioController < ApplicationController
   def call_status
     call_log = CallLog.find(params[:call_id])
     call_log.update_attributes(:call_sid => params[:CallSid], :call_duration =>params[:CallDuration],:call_status => params[:CallStatus])
-    if params[:attempt] == "first" && params[:CallStatus] == "no-answer"
+    if params[:attempt] == "first" && (params[:CallStatus] == "no-answer" || call_log.patient_identifier_recording_sid.nil? || call_log.reason_for_consultation_recording_sid.nil?)
       Rails.logger.info "making second attempt"
       sleep(120)
       Rails.logger.info "making second attempt"
@@ -232,6 +238,7 @@ class Api::TwilioController < ApplicationController
         :from => TWILIO_CONFIG['from'],
         :to => params["To"],
         :url => BASE_URL + "/patient_call?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}",
+        :IfMachine => 'Hangup',
         :StatusCallback => BASE_URL + "/call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&attempt=#{attempt}"
       }
       begin

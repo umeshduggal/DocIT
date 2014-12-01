@@ -2,7 +2,7 @@
 # and open the template in the editor.
 
 class HomeController < ApplicationController
-  skip_before_filter :authenticate_user!, :only => [:index, :eula, :contact_us, :videos, :about_us,:send_email]
+  skip_before_filter :authenticate_user!, :only => [:index, :eula, :contact_us, :videos, :about_us, :send_email]
   
   def index
   end
@@ -33,7 +33,7 @@ class HomeController < ApplicationController
   end
   
   def send_mail
-    to = Rails.application.config.super_admin_mail_id;
+    to = Rails.application.config.super_admin_mail_id
     UserMailer.send_feedback(to,params).deliver
     flash[:notice] = 'Form submitted successfully.'
     redirect_to :back
