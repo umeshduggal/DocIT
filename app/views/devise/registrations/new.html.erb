@@ -25,8 +25,13 @@
 <div class="right_field label_height"><%= f.label :mobile_number_confirmation, "Confirm Mobile number", :class => "required" %>
     <%= f.text_field :mobile_number_confirmation,:type=> "tel",:maxlength => "14" %></div>
 
-  <div><%= f.label :email, :class => "required" %>
-    <%= f.email_field :email %></div>
+  <div class="left_field">
+    <%= f.label :email, :class => "required" %>
+    <%= f.email_field :email %>
+  </div>
+<div class="right_field"><%= f.label :email_confirmation, "Confirm Email", :class => "required" %>
+    <%= f.email_field :email_confirmation %> 
+</div>
 
   <div><%= f.label :password, :class => "required" %> <% if @validatable %><i>(<%= @minimum_password_length %> characters minimum)</i><% end %><br />
     <%= f.password_field :password, autocomplete: "off" %></div>
@@ -87,9 +92,13 @@
               <div><%= cc.label :credit_card_number, :class => "required" %>
                 <%= cc.text_field :credit_card_number, autocomplete: "off" %></div>
               <div><%= cc.label :exp_month, :class => "required" %>
-                <%= cc.text_field :exp_month, autocomplete: "off" %></div>
+              <%= select_month(14, :field_name => 'exp_month', :prefix => 'credit_card_detail',:use_month_numbers => true, :prompt => true) %>      
+        
+              </div>
               <div><%= cc.label :exp_year, :class => "required" %>
-                <%= cc.text_field :exp_year, autocomplete: "off" %></div>
+                <%= select_year(Date.today, :field_name => 'exp_year', :prefix => 'credit_card_detail', :start_year => Time.now.year, :prompt => true)  %>
+                <%#= cc.text_field :exp_year, autocomplete: "off" %>
+              </div>
               <div><%= cc.label :CVV, 'CVV', :class => "required" %>
                 <%= cc.password_field :CVV, autocomplete: "off" %></div>
 

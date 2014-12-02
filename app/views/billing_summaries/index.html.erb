@@ -1,10 +1,11 @@
 <% if current_user.has_role? :intended_recipient %>
-  <h2>Billing Summary details for <%= current_user.parent.name %>, <%= current_user.parent.practice_name %></h2>
+  <h2>Billing Summary</h2>
 <% else %>
   <h2>Billing Summary details for <%= current_user.name %>, <%= current_user.practice_name %></h2>
 <% end %>
 
-
+<% @user_ids.each do |uid| %>
+  <h4>Doctor: <%= User.find(uid).name rescue "" %> </h4>
 <table class="table table-hover table-condensed table-bordered table-striped">
   
   <thead>
@@ -16,18 +17,18 @@
   </thead>
 
   <tbody>
-    
-    <% @billing_summaries.each do |call_log|
-        t = call_log.total_duration.to_i
+    <% Rails.logger.info @billing_summaries[uid].inspect %>
+    <% @billing_summaries[uid].each do |bill_sumr|
+        t = bill_sumr.total_duration.to_i
         mm, ss = t.divmod(60)            #=> [4515, 21]
         hh, mm = mm.divmod(60)
     %>
       <tr>
-        <td><%= call_log.created_at.strftime("%Y-%m-%d %H:%M:%S") rescue nil %></td>
-        <td><%= number_with_precision(call_log.total_ammount, :precision => 2) %></td>
+        <td><%= bill_sumr.created_at.strftime("%Y-%m-%d %H:%M:%S") rescue nil %></td>
+        <td><%= number_with_precision(bill_sumr.total_ammount, :precision => 2) %></td>
         <td><%=  "%02d : %02d : %02d" % [hh, mm, ss]%></td>
     <% end %>
-       <%= will_paginate @billing_summaries unless @billing_summaries.blank? %>
+       <%= will_paginate @billing_summaries[uid] unless @billing_summaries.blank? %>
   </tbody>
 </table>
-
+<% end %>

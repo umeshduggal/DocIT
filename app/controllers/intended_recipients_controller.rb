@@ -34,7 +34,7 @@ class IntendedRecipientsController < ApplicationController
   def create
     @intended_recipient = IntendedRecipient.new(params[:intended_recipient])
     respond_to do |format|
-      if @intended_recipient.save
+      if @intended_recipient.save!
         format.html { redirect_to billing_manager_url, notice: 'IntendedRecipient was successfully created.' }
         format.json { render json: @intended_recipient, status: :created, location: @intended_recipient }
       else

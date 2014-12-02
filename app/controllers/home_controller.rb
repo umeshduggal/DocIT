@@ -2,7 +2,7 @@
 # and open the template in the editor.
 
 class HomeController < ApplicationController
-  skip_before_filter :authenticate_user!, :only => [:index, :eula, :contact_us, :videos, :about_us, :send_email]
+  skip_before_filter :authenticate_user!, :only => [:index, :eula, :contact_us, :videos, :about_us, :send_mail]
   
   def index
   end

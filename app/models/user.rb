@@ -6,13 +6,14 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :remember_me, :practice_name, :mobile_number, :verification_code, :verified, :parent_id,
-    :intended_recipients_attributes, :assignments_attributes, :title_id, :mobile_number_confirmation,:consultation_charges_attributes, :terms_of_service
+    :intended_recipients_attributes, :assignments_attributes, :title_id, :mobile_number_confirmation,:consultation_charges_attributes, :terms_of_service,:email_confirmation
 
   before_save :ensure_authentication_token
   validates :first_name,:last_name, presence: true
   validates :mobile_number, presence: true, :if => :check_user_role
   validates :mobile_number, length: {minimum: 10}, :allow_blank => true
   validates :mobile_number, confirmation: true
+  validates :email, confirmation: true
   validates :terms_of_service, :acceptance => {:accept => true}
   has_many :intended_recipients, :dependent => :destroy
   accepts_nested_attributes_for :intended_recipients, :allow_destroy => true
@@ -28,7 +29,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :consultation_charges, :allow_destroy => true
   has_many :consultation_types, :through => :consultation_charges
   belongs_to :title
-  belongs_to :parent, :class_name => "User" 
+  #belongs_to :parent, :class_name => "User" 
  
   
   def check_user_role

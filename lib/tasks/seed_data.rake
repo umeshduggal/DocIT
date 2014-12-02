@@ -32,7 +32,8 @@ namespace "Docit" do
           {:name=> 'Physician Assistant'},
           {:name=> 'Mr'},
           {:name=> 'Mrs'},
-          {:name=> 'Ms'}
+          {:name=> 'Ms'},
+          {:name=> 'Attorney'}
         ]
 
         titles.each do |t|

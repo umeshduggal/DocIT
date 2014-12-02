@@ -2,16 +2,16 @@ class IntendedRecipient < ActiveRecord::Base
  attr_accessible :email, :email_confirmation,:user_id
  validates :email, presence: true
  validates :email, confirmation: true
- validates :email, :uniqueness => true
+ #validates :email, :uniqueness => true
  
  belongs_to :user
- validate :validate_email_registered
+ #validate :validate_email_registered
 
-  def validate_email_registered
-    if User.find_by_email(self.email) && IntendedRecipient.find_by_email(self.email).blank?
-      errors[:base] << "Email has already been registered" 
-    end
-  end
+#  def validate_email_registered
+#    if User.find_by_email(self.email) && IntendedRecipient.find_by_email(self.email).blank?
+#      errors[:base] << "Email has already been registered" 
+#    end
+#  end
  
  after_create :send_invitation_email
 
