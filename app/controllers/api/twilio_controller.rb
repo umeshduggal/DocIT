@@ -5,7 +5,7 @@ class Api::TwilioController < ApplicationController
   
   
   # base URL of this application
-  BASE_URL = "http://ec2-54-149-23-208.us-west-2.compute.amazonaws.com/api/twilio"
+  BASE_URL = "http://www.docitamerica.com/api/twilio"
   # Use the Twilio REST API to initiate an outgoing call
   def makecall
     if !params['number']
@@ -76,14 +76,34 @@ class Api::TwilioController < ApplicationController
   end
   
   def patient_identifier
+    if params[:repeat]
+      repeat = params[:repeat].to_i + 1
+    else
+      repeat = 1
+    end
     if params['Digits'] == '2'
       @language = "es-ES"
     elsif params['Digits'] == '1'
       @language = "en-US"
     end
     @language = params[:language] if @language.blank?
+    @post_to = BASE_URL + "/patient_identifier_record?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
+    @redirect_to = BASE_URL + "/patient_identifier?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}&repeat=#{repeat}"
+    if repeat <= 5
+      render :action => "patient_identifier.xml.builder", :layout => false
+    else
+      render :action => "hangup.xml.builder", :layout => false
+    end
+  end
+  
+  def patient_identifier_record
+    @language = params[:language] 
     @post_to = BASE_URL + "/patient_identifier_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
     @redirect_to = BASE_URL + "/patient_identifier?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
+    if params['Digits'] == '1'
+      render :action => "patient_identifier_record.xml.builder", :layout => false
+      return
+    end
     render :action => "patient_identifier.xml.builder", :layout => false
     return
   end
@@ -93,7 +113,35 @@ class Api::TwilioController < ApplicationController
     CallLog.find(params[:call_id]).update_attributes(:patient_identifier_recording_sid => params[:RecordingSid])
     @post_to = BASE_URL + "/patient_reason_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
     @redirect_to = BASE_URL + "/patient_identifier_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
+    redirect_to :action => 'patient_reason', :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
+  end
+  
+  def patient_reason
+    if params[:repeat]
+      repeat = params[:repeat].to_i + 1
+    else
+      repeat = 1
+    end
+    @language = params[:language]
+    @post_to = BASE_URL + "/patient_reason_record?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
+    @redirect_to = BASE_URL + "/patient_reason?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}&repeat=#{repeat}"
+    if repeat <= 5
+      render :action => "patient_reason.xml.builder", :layout => false
+    else
+      render :action => "hangup.xml.builder", :layout => false
+    end    
+  end
+  
+  def patient_reason_record
+    @language = params[:language] 
+    @post_to = BASE_URL + "/patient_reason_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
+    @redirect_to = BASE_URL + "/patient_reason?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
+    if params['Digits'] == '1'
+      render :action => "patient_reason_record.xml.builder", :layout => false
+      return
+    end
     render :action => "patient_reason.xml.builder", :layout => false
+    return
   end
   
   def patient_reason_status
@@ -237,7 +285,7 @@ class Api::TwilioController < ApplicationController
     call_log.update_attributes(:call_sid => params[:CallSid], :call_duration =>params[:CallDuration],:call_status => params[:CallStatus])
     if params[:attempt] == "first" && (params[:CallStatus] == "no-answer" || call_log.patient_identifier_recording_sid.nil? || call_log.reason_for_consultation_recording_sid.nil?)
       Rails.logger.info "making second attempt"
-      sleep(120)
+      #sleep(120)
       Rails.logger.info "making second attempt"
       attempt = "second"
       data = {
