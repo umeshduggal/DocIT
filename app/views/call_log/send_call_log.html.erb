@@ -1,25 +1,17 @@
 <section style="margin-left: 10px;">
-  <h1>Contact Us </h1>
+  <h1>Send Call Log to User</h1>
   <div class="container">
     <div class="row-fluid">
-      <div class="span12" >
-        <%= form_tag(send_mail_path, :id=>"contact-form") do %>
-        <%= hidden_field_tag :subject, "Feedback" %>
-        <%= hidden_field_tag :contact_us, true %>
-            <div class="form-group">
-                <%= label_tag 'name', 'Name', :class =>"required" %>
-                <%= text_field_tag 'name', nil, class: 'form-control text-width', placeholder: 'Your Name' %>
-            </div>
+      <div class="span6" >
+        <%= form_tag(send_call_log_mail_path, :id=>"send-call-log-form") do %>
+        <%= hidden_field_tag :call_id, params[:id] %>
            <div class="form-group">
-               <%= label_tag 'email', 'Email', :class =>"required" %>
-               <%= email_field_tag 'email', nil, class: 'form-control text-width', placeholder: 'Your Email Address' %>
+               <%= label_tag 'email', 'DocIt Subscriber Email', :class =>"required" %>
+               <%= email_field_tag 'email', nil, class: 'form-control text-width', placeholder: 'Email Address' %>
            </div>
-           <div class="form-group">
-               <%= label_tag 'message', 'Message', :class =>"required" %>
-               <%= text_area_tag 'message', nil, class: 'form-control text-width', rows: 4, placeholder: 'Comments...' %>
-           </div>
+           
         <div class="form-group button-margin">
-              <%= submit_tag nil, class: 'btn btn-default btn-about pull-right' %>
+              <%= submit_tag 'Send Email', class: 'btn btn-default btn-about pull-right' %>
            </div>
            
        <% end %>
@@ -30,13 +22,10 @@
   
 <script type="text/javascript">
   $(document).ready(function () {
-  $("#contact-form").validate({
+  $("#send-call-log-form").validate({
     debug: true,
     rules: {
-    "email": {required: true, email: true},
-    "name": {required: true},
-    //"contact[phone]": {required: true, phone: true}
-    "message": {required: true}
+    "email": {required: true, email: true}
     }
     , submitHandler: function(form) { form.submit(); } 
   });

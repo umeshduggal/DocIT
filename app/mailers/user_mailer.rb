@@ -34,17 +34,12 @@ class UserMailer < ActionMailer::Base
     @content_type = content_type
     mail(:to => "#{to}", :subject => params[:subject], template_path: 'mailer', template_name: 'feedback_form')
   end
+    
+  def send_call_log(params, content_type = 'text/html')
+    @params = params
+    @content_type = content_type
+    @user = User.find_by_email(params[:email])
+    mail(:to => "#{params[:email]}", :subject => "Call Log Detail", template_path: 'mailer', template_name: 'call_log_detail')
+  end
   
-#  
-#  def metrofax_email_notification(fax, status, content_type = 'text/html')
-#    @content_type        = content_type
-#    @subject             = fax.subject
-#    @recipients          = fax.from
-#    @from                = fax.to
-#    @sent_on             = Time.now
-#    #@body                = {:body => fax, :status => status }
-#    @body                = fax
-#    @status              = status
-#    mail(to: @recipients, subject: @subject, template_path: 'message_sender', template_name: 'metrofax_email_notification') 
-#  end
 end

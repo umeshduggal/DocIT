@@ -26,7 +26,16 @@ class CallLogController < ApplicationController
   end
   
   def send_call_log
-    
+  end
+  
+  def send_call_log_mail
+    if User.find_by_email(params[:email])
+      UserMailer.send_call_log(params).deliver
+      flash[:notice] = 'Mail Sent successfully.'
+    else
+      flash[:error] = 'Enter valid user email id.'
+    end
+    redirect_to :back
   end
   
 end
