@@ -25,4 +25,8 @@ class CallLogController < ApplicationController
     end
   end
   
+  def send_call_log
+    
+  end
+  
 end
