@@ -1,0 +1,44 @@
+<h2>Call Log detail:</h2>
+<p>
+  <strong>Doctor:</strong>
+  <%= @call_log.user.name %>
+</p>
+
+<p>
+  <strong>Patient Number:</strong>
+  <%= @call_log.patient_mobile_number %>
+</p>
+
+<p>
+  <strong>Date & Time of conversation:</strong>
+  <%= @call_log.conversation_datetime %>
+</p>
+
+<p>
+  <strong>Duration of conversation(MM:SS):</strong>
+  <%= Time.at(@call_log.conversation_call_duration.to_i).utc.strftime("%M:%S") %>
+</p>
+
+<p>
+  <strong>Billable Amount($):</strong>
+  <%= @call_log.billing_summary.billable_ammount rescue '' %>
+</p>
+
+<p>
+  <strong>Patient Identifier:</strong>
+  <% unless @call_log.patient_identifier_link == '' %>
+    <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), @call_log.patient_identifier_link, :target =>"_blank" %>
+  <% end %>
+</p>
+<p>
+  <strong>Reason For Consultation:</strong>
+  <% unless @call_log.reason_for_consultation_link == '' %> 
+    <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), @call_log.reason_for_consultation_link, :target =>"_blank" %>
+  <% end %>
+</p>
+<p>
+  <strong>Recording of the conversation:</strong>
+  <% unless @call_log.conversation_recording_link == '' %>
+    <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), @call_log.conversation_recording_link, :target =>"_blank" %>
+  <% end %>
+</p>

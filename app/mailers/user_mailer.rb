@@ -5,6 +5,11 @@ class UserMailer < ActionMailer::Base
     @user = user
     @email = to.email
     @id = to.id
+    if User.find_by_email(to.email)
+      @registered = true
+    else
+      @registered = false
+    end
     #attachments["rails.png"] = File.read("#{Rails.root}/public/images/rails.png")
     @content_type = content_type
     mail(:to => "#{@email}", :subject => "Invitation for Registration", template_path: 'guest_registrations/mailer', template_name: 'registration_instruction')

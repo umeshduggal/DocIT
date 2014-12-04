@@ -36,6 +36,8 @@ devise_scope :user do
   match 'user/:id' => 'intended_recipients#user_action', :via => :post, :as => :user_action
   resources :intended_recipients
   match '/call_logs' => 'call_log#index', :via => :get
+  match '/call_log/:id/archive' => 'call_log#archive', :via => :post,:as => 'call_log_archive'
+  match '/call_logs/:id' => 'call_log#show', :via => :get,:as => 'show_call_logs'
 #  match 'home/makecall' => 'home#makecall', :via => :post
 #  match 'home/reminder' => 'home#reminder', :via => :post
 #  match 'home/goodbye' => 'home#goodbye', :via => :post

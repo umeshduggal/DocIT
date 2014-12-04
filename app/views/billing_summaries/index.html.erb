@@ -3,32 +3,38 @@
 <% else %>
   <h2>Billing Summary details for <%= current_user.name %>, <%= current_user.practice_name %></h2>
 <% end %>
-
+<div> <i>i.	Consult 0-5min=99499
+    <br>ii.	Consult 5-10min=99441<br>
+    iii.	Consult 10-20min=99442<br>
+    iv.	Consult 20-30min=99443<br>
+    v.	Consult >30min= 99499
+  </i></div>
 <% @user_ids.each do |uid| %>
   <h4>Doctor: <%= User.find(uid).name rescue "" %> </h4>
-<table class="table table-hover table-condensed table-bordered table-striped">
-  
-  <thead>
-    <tr>
-      <th>Billing Date</th>
-      <th>Total Billable Amount ($)</th>
-      <th>Total Call Duration (HH:MM:SS)</th>
-      </tr>
-  </thead>
+  <table class="table table-hover table-condensed table-bordered table-striped">
 
-  <tbody>
-    <% Rails.logger.info @billing_summaries[uid].inspect %>
-    <% @billing_summaries[uid].each do |bill_sumr|
-        t = bill_sumr.total_duration.to_i
-        mm, ss = t.divmod(60)            #=> [4515, 21]
-        hh, mm = mm.divmod(60)
-    %>
+    <thead>
       <tr>
-        <td><%= bill_sumr.created_at.strftime("%Y-%m-%d %H:%M:%S") rescue nil %></td>
-        <td><%= number_with_precision(bill_sumr.total_ammount, :precision => 2) %></td>
-        <td><%=  "%02d : %02d : %02d" % [hh, mm, ss]%></td>
-    <% end %>
-       <%= will_paginate @billing_summaries[uid] unless @billing_summaries.blank? %>
-  </tbody>
-</table>
+        <th>Billing Date</th>
+        <th>Total Billable Amount ($)</th>
+        <th>Total Call Duration (HH:MM:SS)</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if @billing_summaries[uid] %>
+        <% @billing_summaries[uid].each do |bill_sumr|
+          t = bill_sumr.total_duration.to_i
+          mm, ss = t.divmod(60)            #=> [4515, 21]
+          hh, mm = mm.divmod(60)
+        %>
+          <tr>
+            <td><%= bill_sumr.created_at.strftime("%Y-%m-%d %H:%M:%S") rescue nil %></td>
+            <td><%= number_with_precision(bill_sumr.total_ammount, :precision => 2) %></td>
+            <td><%=  "%02d : %02d : %02d" % [hh, mm, ss]%></td>
+          <% end %>
+          <%= will_paginate @billing_summaries[uid] unless @billing_summaries.blank? %>
+        <% end %>
+    </tbody>
+  </table>
 <% end %>

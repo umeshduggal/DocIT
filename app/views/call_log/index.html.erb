@@ -4,12 +4,7 @@
   <h2>List of Call Log for <%= current_user.name %>, <%= current_user.practice_name %></h2>
 <% end %>
 
-  <div> <i>i.	Consult 0-5min=99499
-        <br>ii.	Consult 5-10min=99441<br>
-iii.	Consult 10-20min=99442<br>
-iv.	Consult 20-30min=99443<br>
-v.	Consult >30min= 99499
-</i></div>
+
 <table class="table table-hover table-condensed table-bordered table-striped">
   <thead>
     <tr>
@@ -18,11 +13,14 @@ v.	Consult >30min= 99499
       <% end %>
       <th>Patient Number</th>
       <th>Date & Time of conversation</th>
-      <th>Duration of conversation(sec.)</th>
+      <th>Duration of conversation(MM:SS)</th>
        <th>Billable Amount($)</th>
       <th>Patient Identifier </th>
       <th>Reason For Consultation</th>
       <th>Recording of the conversation</th>
+      <% if current_user.has_role? :intended_recipient %>
+      <th>Action</th>
+      <% end %>
       </tr>
   </thead>
   <tbody>
@@ -33,7 +31,7 @@ v.	Consult >30min= 99499
       <% end %>
         <td><%= call_log.patient_mobile_number %></td>
         <td><%= call_log.conversation_datetime %></td>
-        <td style="text-align: center"><%= call_log.conversation_call_duration %></td>
+        <td style="text-align: center"><%= Time.at(call_log.conversation_call_duration.to_i).utc.strftime("%M:%S") %></td>
         <td style="text-align: center"><%= call_log.billing_summary.billable_ammount rescue ''%></td>
         <td><% unless call_log.patient_identifier_link == '' %>
   <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.patient_identifier_link, :target =>"_blank" %><%  end %></td>
@@ -41,6 +39,9 @@ v.	Consult >30min= 99499
   <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.reason_for_consultation_link, :target =>"_blank" %><%  end %></td>
         <td><% unless call_log.conversation_recording_link == '' %>
   <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.conversation_recording_link, :target =>"_blank" %><%  end %></td>
+        <% if current_user.has_role? :intended_recipient %>
+        <td> <%= link_to("Delete", call_log_archive_path(call_log.id, archive: true), method: :post, :confirm => 'Are you sure?')  %>|| <%= link_to("show", show_call_logs_path(call_log.id), method: :get)  %></td>
+        <% end %>
       </tr>
     <% end %>
        <%= will_paginate @call_logs unless @call_logs.blank? %>

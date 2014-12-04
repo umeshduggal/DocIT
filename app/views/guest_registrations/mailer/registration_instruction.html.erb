@@ -1,6 +1,12 @@
 <p>Welcome to DocIT</p>
-<p> Dr <%= @user.first_name %> <%= @user.last_name %> has joined DocIt and assigned you as the designated person to bill/manage their phone consultations.  To view a summary of the consultations, you must create a user name and password.  Please feel free to contact us with questions or refer to our website for a video on best billing practices. </p>
+<p> Dr <%= @user.first_name %> <%= @user.last_name %> has joined DocIt and assigned you as the designated person to bill/manage their phone consultations. 
+  To view a summary of the consultations, you must <% if @registered %> login with your user name and password. <%else%> create a user name and password. <%end%>  Please feel free to contact us with questions or refer to our website for a video on best billing practices. </p>
 <br></br>
+<% if @registered %>
 <p>For registration please follow the link below:</p>
-
 <p><%= link_to 'Register as Intended recipient', signup_new_url(@id) %></p>
+<% else %>
+<p>For login please follow the link below:</p>
+<p><%= link_to 'Sing In', new_user_session_url %></p>
+<% end %>
+
