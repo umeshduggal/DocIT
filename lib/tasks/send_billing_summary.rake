@@ -1,8 +1,6 @@
 namespace :docit do
   task :send_billing_summary => :environment do
-    File.open("/home/umesh/docit/DocIT/log/rake.log", "w+") do |f|
-      f.write("Starting Cron task at " + Time.zone.now.to_i.to_s)
-    end
+
     DATETIME_CONST = Time.zone.now.to_i.to_s
     CallLog.where("conversation_call_duration is not null").each do |cl|
         if cl.billing_summary.nil?

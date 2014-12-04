@@ -22,7 +22,7 @@
     </thead>
 
     <tbody>
-      <% if @billing_summaries[uid] %>
+      
         <% @billing_summaries[uid].each do |bill_sumr|
           t = bill_sumr.total_duration.to_i
           mm, ss = t.divmod(60)            #=> [4515, 21]
@@ -34,7 +34,7 @@
             <td><%=  "%02d : %02d : %02d" % [hh, mm, ss]%></td>
           <% end %>
           <%= will_paginate @billing_summaries[uid] unless @billing_summaries.blank? %>
-        <% end %>
+        
     </tbody>
   </table>
 <% end %>
