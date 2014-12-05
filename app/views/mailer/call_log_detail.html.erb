@@ -1,0 +1,10 @@
+<p>Dear <%= @user.name %></p>
+
+<p>You have a Docit recording meant for your practice.  Press here to access-</p>
+<br>
+<%= link_to("Show Call Log", show_call_logs_url(@params[:call_id])) %>
+<p><i>(You must login to access this recording.)</i></p>
+
+</br>
+<p>Thank you,</p>
+<p>Docit</p>

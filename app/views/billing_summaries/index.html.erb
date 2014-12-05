@@ -29,7 +29,7 @@
           hh, mm = mm.divmod(60)
         %>
           <tr>
-            <td><%= bill_sumr.created_at.strftime("%Y-%m-%d %H:%M:%S") rescue nil %></td>
+            <td><%= bill_sumr.created_at.strftime("%m/%d/%Y %H:%M:%S") rescue nil %></td>
             <td><%= number_with_precision(bill_sumr.total_ammount, :precision => 2) %></td>
             <td><%=  "%02d : %02d : %02d" % [hh, mm, ss]%></td>
           <% end %>
