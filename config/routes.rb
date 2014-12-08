@@ -29,6 +29,8 @@ devise_scope :user do
   match '/contact-us' => 'home#contact_us', :via => :get, :as => :contact_us
   match '/about-us' => 'home#about_us', :via => :get, :as => :about_us
   match '/videos' => 'home#videos', :via => :get
+  match '/info' => 'home#info_for_billers_coders', :via => :get,:as => :info_for_billers_coders
+  match '/download_pdf' => 'home#download_pdf', :via => :get
   match '/send_mail' => 'home#send_mail', :via => :post
   match 'home/verify' => 'home#number_verification', :via => :post
   match 'billing_managers' => 'intended_recipients#index', :via => :get, :as => :billing_manager

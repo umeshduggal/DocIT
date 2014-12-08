@@ -2,7 +2,7 @@
 # and open the template in the editor.
 
 class HomeController < ApplicationController
-  skip_before_filter :authenticate_user!, :only => [:index, :eula, :contact_us, :videos, :about_us, :send_mail]
+  skip_before_filter :authenticate_user!, :only => [:index, :eula, :contact_us, :about_us, :send_mail, :info_for_billers_coders,:download_pdf]
   
   def index
   end
@@ -13,7 +13,14 @@ class HomeController < ApplicationController
   def about_us
   end
   
-  def videos
+#  def videos
+#  end
+
+  def info_for_billers_coders
+  end
+  
+  def download_pdf
+    send_file 'public/ABN.3.11.pdf'
   end
   
   def number_verification

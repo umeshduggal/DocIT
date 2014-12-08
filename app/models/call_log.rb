@@ -27,6 +27,10 @@ class CallLog < ActiveRecord::Base
     self.time_of_conversation.strftime("%m/%d/%Y %H:%M:%S") rescue nil
   end
   
+  def billing_summary_generated?
+    self.billing_summary ?  true : false
+  end
+  
   def updated_at
     super.strftime("%Y-%m-%d %H:%M:%S") rescue super
   end

@@ -57,3 +57,8 @@
   .button-margin{
       margin-right: 12%;
   }
+  
+  .sign_up_link {
+text-decoration: none;
+text-shadow: 0 1px 0 #ffffff;
+  } 

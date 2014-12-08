@@ -40,7 +40,7 @@
         <td><% unless call_log.conversation_recording_link == '' %>
   <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.conversation_recording_link, :target =>"_blank" %><%  end %></td>
         <% if current_user.has_role? :intended_recipient %>
-        <td> <%= link_to("Delete", call_log_archive_path(call_log.id, archive: true), method: :post, :confirm => 'Are you sure?') %> | <%= link_to("Email", send_call_log_path(call_log.id), method: :get) %> </td>
+        <td> <% if call_log.billing_summary_generated? %> <%= link_to("Delete", call_log_archive_path(call_log.id, archive: true), method: :post, :confirm => 'Are you sure?') %> | <% end %><%= link_to("Email", send_call_log_path(call_log.id), method: :get) %> </td>
         <% end %>
       </tr>
     <% end %>
