@@ -2,7 +2,9 @@
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <% devise_error_messages! %>
-  
+  <div class="container">
+    <div class="row-fluid">
+      <div class="span6" style="padding-right:20px; border-right: 1px solid #ccc;">
    <div><%= f.label :first_name, :class => "required" %>
   <%= f.text_field :first_name, autofocus: true %></div>
 
@@ -31,8 +33,43 @@
 
   <div><%= f.label :current_password, :class => "required" %> <i>(we need your current password to confirm your changes)</i><br />
     <%= f.password_field :current_password, autocomplete: "off" %></div>
+    </div>
 
+        <div class="span6">
+            <div class="container-content">
+                <div>
+    <section>
+      <%= content_tag :section, :class => "" do %>
+  <% field_set_tag "Assign your potential charges" do  -%>
+      <i>FYI- You will now establish your charges for phone consultations with your patients.  Your patients may opt to listen to these charges when DocIt is obtaining consent for the phone consultation.  Practices vary in terms of charging patients.  Many practices charge all patients, some charge selectively, and some only use DocIt for record keeping.  Charging is at the discretion of the practice and providers.  DocIt is not a billing company is held harmless in all billing related matters.  As a general rule, most practices charge 100-200x Medicare rates.
+        Assuming a model 200x Medicare: <br>
+99441= $28 allowing .4 RVU<br>
+99442= $53 allowing .77 RVU <br>
+99443= $80 allowing 1.14 RVU<br>
+</i>
+<br>
+  <% i = 1 %>
+  <%= f.fields_for :consultation_charges do |builder| %>
+     <div class="fields">
+    <%= builder.hidden_field :consultation_type_id, value: i  %>
+    <%= builder.label :charges, ConsultationType.find(i).description, :class => "required" %>
+       <div id="field_container">
+    <%= builder.text_field :charges %><span class="doller_sign">$</span>
+    </div>
+       <% i = i+1 %>
+  </div>
+    <% end %>
+  <% end %>
+     <% end %>
+    </section>
+  </div>
+              
+               </div>
+        </div>
+  
   <div><%= f.submit "Update" %></div>
+    </div>
+    </div>
 <% end %>
 
 <%= link_to "Back", :back %>

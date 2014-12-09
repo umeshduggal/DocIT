@@ -9,6 +9,14 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
   
+  
+  def after_sign_in_path_for(resource)
+    if current_user.has_role? :intended_recipient
+      call_logs_path
+    else
+      super
+    end
+  end
   private
   
   def authenticate_user_from_token!

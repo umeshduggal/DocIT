@@ -51,7 +51,6 @@
               <li><%= link_to "Home", root_url  %></li>
               <li><%= link_to "Sign In", new_user_session_url %></li>
               <li><%= link_to "Info for Billers/Coders", info_for_billers_coders_url %></li>
-              <li><%= link_to "About Us", about_us_url %></li>
               <li><%= link_to "Contact Us", contact_us_url %></li>
               <% else %>
               <li><%= link_to "Home", root_url  %></li>
@@ -59,19 +58,13 @@
                 <% if current_user.has_role? :doctor %>
                  <li><%= link_to "Manage Billing Manager", billing_manager_url %></li>
                  <% end %>
-                 <% if current_user.has_role? :intended_recipient %>
-                 <li><%= link_to "Billing Summary", billing_summaries_url %></li>
-                 <% end %>
-                  
-                <li><%= link_to "About Us", about_us_url %></li>
+                  <li><%= link_to "Info for Billers/Coders", info_for_billers_coders_url %></li>
                 <li><%= link_to "Contact Us", contact_us_url %></li>
-                
               <% end %>
          
             </ul>
               <% if user_signed_in? %>
-                   <ul id="menu-menu" class="nav navbar-nav navbar-right" style="float:right">
-                  
+                   <ul id="menu-menu" class="nav navbar-nav navbar-right" style="float:right">                  
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%='Welcome <b>'.html_safe + current_user.name + "</b>".html_safe%> <span class="caret"></span></a>
                       <ul class="dropdown-menu" role="menu">
