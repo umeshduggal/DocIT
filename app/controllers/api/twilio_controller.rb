@@ -285,14 +285,14 @@ class Api::TwilioController < ApplicationController
     call_log.update_attributes(:call_sid => params[:CallSid], :call_duration =>params[:CallDuration],:call_status => params[:CallStatus])
     if params[:attempt] == "first" && (params[:CallStatus] == "no-answer" || call_log.patient_identifier_recording_sid.nil? || call_log.reason_for_consultation_recording_sid.nil?)
       Rails.logger.info "making second attempt"
-      #sleep(120)
+      sleep(120)
       Rails.logger.info "making second attempt"
       attempt = "second"
       data = {
         :from => TWILIO_CONFIG['from'],
         :to => params["To"],
         :url => BASE_URL + "/patient_call?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}",
-        :IfMachine => 'Hangup',
+        :IfMachine => 'Continue',
         :StatusCallback => BASE_URL + "/call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&attempt=#{attempt}"
       }
       begin
