@@ -110,10 +110,14 @@ class Api::TwilioController < ApplicationController
   
   def patient_identifier_status
     @language = params[:language]
-    CallLog.find(params[:call_id]).update_attributes(:patient_identifier_recording_sid => params[:RecordingSid])
-    @post_to = BASE_URL + "/patient_reason_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
-    @redirect_to = BASE_URL + "/patient_identifier_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
-    redirect_to :action => 'patient_reason', :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
+    @post_to = BASE_URL + "/patient_identifier_record?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
+    @redirect_to = BASE_URL + "/patient_identifier?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}&repeat=#{2}"
+    if params['Digits'] == '2'
+      CallLog.find(params[:call_id]).update_attributes(:patient_identifier_recording_sid => params[:RecordingSid])
+      redirect_to :action => 'patient_reason', :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
+    else
+      render :action => "patient_identifier.xml.builder", :layout => false
+    end
   end
   
   def patient_reason
@@ -147,9 +151,15 @@ class Api::TwilioController < ApplicationController
   def patient_reason_status
     @recording_url = params[:RecordingUrl]
     @language = params[:language]
-    CallLog.find(params[:call_id]).update_attributes(:reason_for_consultation_recording_sid => params[:RecordingSid])
-    redirect_to :action => 'patient_ready_for_call', :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
-    return
+    @post_to = BASE_URL + "/patient_reason_record?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
+    @redirect_to = BASE_URL + "/patient_reason?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}&repeat=#{2}"
+    if params['Digits'] == '2'
+      CallLog.find(params[:call_id]).update_attributes(:reason_for_consultation_recording_sid => params[:RecordingSid])
+      redirect_to :action => 'patient_ready_for_call', :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
+      return
+    else
+      render :action => "patient_reason.xml.builder", :layout => false
+    end
   end
   
   def patient_ready_for_call
@@ -187,7 +197,6 @@ class Api::TwilioController < ApplicationController
     end
     
     if params['Digits'] == '1'
-      @post_to = BASE_URL + "/doctor_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
       @patient_info_url = BASE_URL + "/patient_information?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
       @doctor_call_status = BASE_URL + "/doctor_call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&patient_number=#{params['Called']}"
       data = {
@@ -267,6 +276,11 @@ class Api::TwilioController < ApplicationController
         to: params[:patient_number],
         body: "We are sorry but #{current_user.name} is no longer able to pick up the phone, we will leave a message. Goodbye."
       ) 
+      response = client.account.sms.messages.create(
+        from: TWILIO_CONFIG['from'],
+        to: current_user.mobile_number,
+        body: "You have missed a call back from #{params[:patient_number]} - Thank You Docit"
+      )
       #render :action => "goodbye.xml.builder", :layout => false 
     end
     render :nothing => true 
