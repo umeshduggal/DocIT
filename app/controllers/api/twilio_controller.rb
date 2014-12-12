@@ -90,7 +90,11 @@ class Api::TwilioController < ApplicationController
     @post_to = BASE_URL + "/patient_identifier_record?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
     @redirect_to = BASE_URL + "/patient_identifier?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}&repeat=#{repeat}"
     if repeat <= 5
-      render :action => "patient_identifier.xml.builder", :layout => false
+      if @language == "es-ES"
+        render :action => "patient_identifier_spn.xml.builder", :layout => false
+      else
+        render :action => "patient_identifier.xml.builder", :layout => false
+      end
     else
       render :action => "hangup.xml.builder", :layout => false
     end
@@ -104,7 +108,11 @@ class Api::TwilioController < ApplicationController
       render :action => "patient_identifier_record.xml.builder", :layout => false
       return
     end
-    render :action => "patient_identifier.xml.builder", :layout => false
+    if @language == "es-ES"
+      render :action => "patient_identifier_spn.xml.builder", :layout => false
+    else
+      render :action => "patient_identifier.xml.builder", :layout => false
+    end
     return
   end
   
@@ -116,7 +124,11 @@ class Api::TwilioController < ApplicationController
       CallLog.find(params[:call_id]).update_attributes(:patient_identifier_recording_sid => params[:RecordingSid])
       redirect_to :action => 'patient_reason', :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
     else
-      render :action => "patient_identifier.xml.builder", :layout => false
+      if @language == "es-ES"
+        render :action => "patient_identifier_spn.xml.builder", :layout => false
+      else
+        render :action => "patient_identifier.xml.builder", :layout => false
+      end
     end
   end
   
@@ -130,7 +142,11 @@ class Api::TwilioController < ApplicationController
     @post_to = BASE_URL + "/patient_reason_record?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
     @redirect_to = BASE_URL + "/patient_reason?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}&repeat=#{repeat}"
     if repeat <= 5
-      render :action => "patient_reason.xml.builder", :layout => false
+      if @language == "es-ES"
+        render :action => "patient_reason_spn.xml.builder", :layout => false
+      else
+        render :action => "patient_reason.xml.builder", :layout => false
+      end
     else
       render :action => "hangup.xml.builder", :layout => false
     end    
@@ -144,7 +160,11 @@ class Api::TwilioController < ApplicationController
       render :action => "patient_reason_record.xml.builder", :layout => false
       return
     end
-    render :action => "patient_reason.xml.builder", :layout => false
+    if @language == "es-ES"
+      render :action => "patient_reason_spn.xml.builder", :layout => false
+    else
+      render :action => "patient_reason.xml.builder", :layout => false
+    end
     return
   end
   
@@ -158,7 +178,11 @@ class Api::TwilioController < ApplicationController
       redirect_to :action => 'patient_ready_for_call', :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
       return
     else
-      render :action => "patient_reason.xml.builder", :layout => false
+      if @language == "es-ES"
+        render :action => "patient_reason_spn.xml.builder", :layout => false
+      else
+        render :action => "patient_reason.xml.builder", :layout => false
+      end
     end
   end
   
@@ -172,7 +196,11 @@ class Api::TwilioController < ApplicationController
     @post_to = BASE_URL + "/patient_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
     @redirect_to = BASE_URL + "/patient_ready_for_call?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&repeat=#{repeat}"
     if repeat <= 5
-      render :action => "patient_ready_for_call.xml.builder", :layout => false
+      if @language == "es-ES"
+        render :action => "patient_ready_for_call_spn.xml.builder", :layout => false
+      else
+        render :action => "patient_ready_for_call.xml.builder", :layout => false
+      end
     else
       render :action => "hangup.xml.builder", :layout => false
     end
@@ -192,7 +220,11 @@ class Api::TwilioController < ApplicationController
       end
       @charges = [0,1,2,3,4,5] if @charges.length == 0
       @post_to = BASE_URL + "/charges_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
-      render :action => "call_charges.xml.builder", :layout => false
+      if @language == "es-ES"
+        render :action => "call_charges_spn.xml.builder", :layout => false
+      else
+        render :action => "call_charges.xml.builder", :layout => false
+      end
       return
     end
     
@@ -335,10 +367,5 @@ class Api::TwilioController < ApplicationController
     end
     render :nothing => true
   end
-  
-  def registration_info
-    render :action => "registration_info.xml.builder", :layout => false
-  end
-  
-  
+    
 end

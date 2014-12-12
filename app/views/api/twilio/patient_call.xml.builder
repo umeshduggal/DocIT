@@ -4,7 +4,7 @@ xml.Response do
         xml.Say "Hello, #{current_user.name} is returning your call. ", :voice=>"woman"
         xml.Say "This call may be recorded and billed. ", :voice=>"woman"
         xml.Say "To continue press 1. ", :voice=>"woman"
-        xml.Say "For Spanish press 2. ", :voice=>"woman", :language=> "es-ES"
+        xml.Say "Prese dos para espanol", :voice=>"woman", :language=> "es-ES"
     end
     xml.Redirect @redirect_to
 end
