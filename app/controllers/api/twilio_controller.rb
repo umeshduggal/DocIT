@@ -3,9 +3,9 @@
 
 class Api::TwilioController < ApplicationController
   
-  
   # base URL of this application
   BASE_URL = "http://www.docitamerica.com/api/twilio"
+  #BASE_URL = "http://5d3927f4.ngrok.com/api/twilio"
   # Use the Twilio REST API to initiate an outgoing call
   def makecall
     if !params['number']
@@ -229,8 +229,9 @@ class Api::TwilioController < ApplicationController
     end
     
     if params['Digits'] == '1'
+      attempt = params[:attempt] || "first"
       @patient_info_url = BASE_URL + "/patient_information?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
-      @doctor_call_status = BASE_URL + "/doctor_call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&patient_number=#{params['Called']}"
+      @doctor_call_status = BASE_URL + "/doctor_call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&patient_number=#{params['Called']}&attempt=#{attempt}"
       data = {
         :from => TWILIO_CONFIG['from'],
         :to => current_user.mobile_number,
@@ -287,7 +288,13 @@ class Api::TwilioController < ApplicationController
   
   def doctor_call_status
     @language = params[:language]
-    if ["busy", "no-answer", "failed", "canceled"].include? params[:CallStatus]
+    status_list = ["busy", "no-answer", "failed", "canceled"]
+    Rails.logger.info params.inspect
+    if params[:attempt] == "first" and status_list.include? params[:CallStatus] 
+      redirect_to :action => 'patient_responce', :Digits => 1, :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language], :attempt => "second"
+      return
+    end
+    if status_list.include? params[:CallStatus]
       CallLog.find(params[:call_id]).update_attributes(:conversation_call_status =>params[:CallStatus])
       client = Twilio::REST::Client.new TWILIO_CONFIG['sid'], TWILIO_CONFIG['token']
       # Loop over conferences and print out a property for each one
@@ -367,5 +374,5 @@ class Api::TwilioController < ApplicationController
     end
     render :nothing => true
   end
-    
+  
 end
