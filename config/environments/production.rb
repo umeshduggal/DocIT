@@ -23,7 +23,7 @@ DocIT::Application.configure do
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 
-  config.action_mailer.delivery_method = :smtp
+  #config.action_mailer.delivery_method = :smtp
   # Defaults to nil and saved in location specified by config.assets.prefix
   # config.assets.manifest = YOUR_PATH
 
@@ -72,13 +72,13 @@ DocIT::Application.configure do
 
   config.super_admin_mail_id = "obgynmy@gmail.com"
   
-  config.action_mailer.smtp_settings = {
-      address: "smtp.live.com",
-      port: 25,
-      domain: "live.com",
-      authentication: "plain",
-      enable_starttls_auto: true,
-      user_name: "docitamerica@outlook.com",
-      password: "duggal@123"
-    }
+#  config.action_mailer.smtp_settings = {
+#      address: "smtp.live.com",
+#      port: 25,
+#      domain: "live.com",
+#      authentication: "plain",
+#      enable_starttls_auto: true,
+#      user_name: "docitamerica@outlook.com",
+#      password: "duggal@123"
+#    }
 end
