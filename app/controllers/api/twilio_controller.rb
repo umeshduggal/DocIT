@@ -66,10 +66,12 @@ class Api::TwilioController < ApplicationController
       return
     end
     if params['Digits'] == '1'
-      @post_to = BASE_URL + "/patient_identifier?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}"
-      @redirect_to = BASE_URL + "/language_selection?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&Digits=1"
-      render :action => "language_selection.xml.builder", :layout => false
+      redirect_to :action => 'patient_identifier', :call_id => params[:call_id], :user_email=> params[:user_email],:user_token=> params[:user_token], :Digits=> "1" 
       return
+#      @post_to = BASE_URL + "/patient_identifier?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}"
+#      @redirect_to = BASE_URL + "/language_selection?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&Digits=1"
+#      render :action => "language_selection.xml.builder", :layout => false
+#      return
     end
     redirect_to :action => 'patient_call', :call_id => params[:call_id], :user_email=> params[:user_email],:user_token=> params[:user_token]
     return
@@ -230,8 +232,9 @@ class Api::TwilioController < ApplicationController
     
     if params['Digits'] == '1'
       attempt = params[:attempt] || "first"
+      patient_number = params[:patient_number] || params['Called']
       @patient_info_url = BASE_URL + "/patient_information?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
-      @doctor_call_status = BASE_URL + "/doctor_call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&patient_number=#{params['Called']}&attempt=#{attempt}"
+      @doctor_call_status = BASE_URL + "/doctor_call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&patient_number=#{patient_number}&attempt=#{attempt}"
       data = {
         :from => TWILIO_CONFIG['from'],
         :to => current_user.mobile_number,
@@ -291,21 +294,15 @@ class Api::TwilioController < ApplicationController
     status_list = ["busy", "no-answer", "failed", "canceled"]
     Rails.logger.info params.inspect
     if params[:attempt] == "first" and status_list.include? params[:CallStatus] 
-      redirect_to :action => 'patient_responce', :Digits => 1, :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language], :attempt => "second"
+      Rails.logger.info "making second attempt to Doctor"
+      sleep(5)
+      Rails.logger.info "making second attempt to Doctor"
+      redirect_to :action => 'patient_responce', :Digits => 1, :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language], :attempt => "second", :patient_number => params[:patient_number]
       return
     end
+    client = Twilio::REST::Client.new TWILIO_CONFIG['sid'], TWILIO_CONFIG['token']
     if status_list.include? params[:CallStatus]
       CallLog.find(params[:call_id]).update_attributes(:conversation_call_status =>params[:CallStatus])
-      client = Twilio::REST::Client.new TWILIO_CONFIG['sid'], TWILIO_CONFIG['token']
-      # Loop over conferences and print out a property for each one
-      client.account.conferences.list({
-          :status => "in-progress",
-          :friendly_name => current_user.mobile_number}).each do |conference|
-        conference.participants.list.each do |participant|
-          Rails.logger.info participant.inspect
-          participant.delete
-        end
-      end
       unless params[:patient_number].start_with?("+")
         params[:patient_number] = "+"+params[:patient_number]
       end
@@ -322,6 +319,15 @@ class Api::TwilioController < ApplicationController
       )
       #render :action => "goodbye.xml.builder", :layout => false 
     end
+    # Loop over conferences and print out a property for each one
+      client.account.conferences.list({
+          :status => "in-progress",
+          :friendly_name => current_user.mobile_number}).each do |conference|
+        conference.participants.list.each do |participant|
+          Rails.logger.info participant.inspect
+          participant.delete
+        end
+      end
     render :nothing => true 
     return
   end
@@ -338,7 +344,7 @@ class Api::TwilioController < ApplicationController
     call_log.update_attributes(:call_sid => params[:CallSid], :call_duration =>params[:CallDuration],:call_status => params[:CallStatus])
     if params[:attempt] == "first" && (params[:CallStatus] == "no-answer" || call_log.patient_identifier_recording_sid.nil? || call_log.reason_for_consultation_recording_sid.nil?)
       Rails.logger.info "making second attempt"
-      sleep(120)
+      sleep(60)
       Rails.logger.info "making second attempt"
       attempt = "second"
       data = {
