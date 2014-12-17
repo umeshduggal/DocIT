@@ -79,6 +79,14 @@ class RegistrationsController < Devise::RegistrationsController
     end
     
   end
+  
+   # GET /resource/edit
+  def edit
+    if resource.consultation_charges.blank?
+      5.times { resource.consultation_charges.build }
+    end
+    render :edit
+  end
 
   def update
     super
