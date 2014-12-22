@@ -5,7 +5,7 @@ class Api::TwilioController < ApplicationController
   
   # base URL of this application
   BASE_URL = "http://www.docitamerica.com/api/twilio"
-  #BASE_URL = "http://5d3927f4.ngrok.com/api/twilio"
+  #BASE_URL = "http://5478fd2b.ngrok.com/api/twilio"
   # Use the Twilio REST API to initiate an outgoing call
   def makecall
     if !params['number']
@@ -234,7 +234,7 @@ class Api::TwilioController < ApplicationController
       attempt = params[:attempt] || "first"
       patient_number = params[:patient_number] || params['Called']
       @patient_info_url = BASE_URL + "/patient_information?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
-      @doctor_call_status = BASE_URL + "/doctor_call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&patient_number=#{patient_number}&attempt=#{attempt}"
+      @doctor_call_status = BASE_URL + "/doctor_call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&patient_number=#{patient_number.strip}&attempt=#{attempt}"
       data = {
         :from => TWILIO_CONFIG['from'],
         :to => current_user.mobile_number,
@@ -246,7 +246,9 @@ class Api::TwilioController < ApplicationController
         client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
         client.account.calls.create data
       rescue StandardError => msg
+        Rails.logger.info "Error--- "
         Rails.logger.info "Error--- #{msg.inspect}"
+        Rails.logger.info "Error--- "
       end
       render :action => "doctor_call.xml.builder", :layout => false
       return
