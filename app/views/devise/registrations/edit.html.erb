@@ -60,7 +60,7 @@
     <%= builder.hidden_field :consultation_type_id, value: i  %>
     <%= builder.label :charges, ConsultationType.find(i).description, :class => "required" %>
        <div id="field_container">
-    <%= builder.text_field :charges %><span class="doller_sign">$</span>
+    <%= builder.number_field :charges %><span class="doller_sign">$</span>
     </div>
        <% i = i+1 %>
   </div>

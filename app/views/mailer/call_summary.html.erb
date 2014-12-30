@@ -1,49 +1,10 @@
-<p>Dear <%= @to.name %> </p>
+<p>Hello <%= @to.name %>, 
+you have new phone consultations ready to be reviewed.</p>
+<br>
+<%= link_to("Enter Portal Here", call_logs_url) %>
 
-<p>Please find below the billing summary for yesterday:</p>
-<br></br>
-<h2>List of Call Logs for <%= @user.name %>, <%= @user.practice_name %></h2>
-<table class="table table-hover table-condensed table-bordered table-striped">
-  <thead>
-    <tr>
-      <th>Patient Number</th>
-      <th>Billable Amount ($)</th>
-      <th>Date & Time of conversation</th>
-      <th>Duration of conversation (Seconds)</th>
-      <th>Patient Identifier </th>
-      <th>Reason For Consultation</th>
-      <th>Recording of the conversation</th>
-      </tr>
-  </thead>
-  <tbody>
-    <%
-    total_duration = 0
-    total_amount = 0
-    @call_logs.each do |call_log| 
-    total_duration = total_duration + call_log.conversation_call_duration.to_i
-    total_amount = total_amount + (call_log.billing_summary.billable_ammount.to_d rescue 0)
-    %>
-      <tr>
-        <td><%= call_log.patient_mobile_number %></td>
-        <td style="text-align: center"><%= call_log.billing_summary.billable_ammount rescue ''%></td>
-        <td><%= call_log.conversation_datetime %></td>
-        <td style="text-align: center"><%= call_log.conversation_call_duration %></td>
-        <td><% unless call_log.patient_identifier_link == '' %>
-  <%= link_to 'link to MP3', call_log.patient_identifier_link, :target =>"_blank" %><%  end %></td>
-        <td><% unless call_log.reason_for_consultation_link == '' %> 
-  <%= link_to 'link to MP3', call_log.reason_for_consultation_link, :target =>"_blank" %><%  end %></td>
-        <td><% unless call_log.conversation_recording_link == '' %>
-  <%= link_to 'link to MP3', call_log.conversation_recording_link, :target =>"_blank" %><%  end %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<p><i>(By entering this portal, you are agreeing to comply with all patient confidentiality and privacy laws.)</i></p>
 
-<!--<p>Total Call Duration: <%= total_duration %></p>
-<p>Total Billable Amount: <%= total_amount %></p>-->
-<p>Total Call Duration: <%= Time.at(total_duration).utc.strftime("%H:%M:%S") rescue '' %></p>
-<p>Total Billable Amount: <%= number_to_currency(total_amount) rescue '' %></p>
-<br></br>
-<p>To view call logs please follow the link below:</p>
- 
-<p><%= link_to 'Call Logs on Docit Portal', call_logs_url %></p>
+</br>
+<p>Thank you,</p>
+<p>Docit</p>

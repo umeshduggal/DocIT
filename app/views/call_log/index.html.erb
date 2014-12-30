@@ -23,7 +23,9 @@
        <th>Billable Amount($)</th>
       <th>Patient Identifier </th>
       <th>Reason For Consultation</th>
+      <% if current_user.has_role? :doctor %>
       <th>Recording of the conversation</th>
+     <% end %>
       <% if current_user.has_role? :intended_recipient %>
       <th>Action</th>
       <% end %>
@@ -43,8 +45,10 @@
   <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.patient_identifier_link, :target =>"_blank" %><%  end %></td>
         <td><% unless call_log.reason_for_consultation_link == '' %> 
   <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.reason_for_consultation_link, :target =>"_blank" %><%  end %></td>
+         <% if current_user.has_role? :doctor %>
         <td><% unless call_log.conversation_recording_link == '' %>
-  <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.conversation_recording_link, :target =>"_blank" %><%  end %></td>
+      <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.conversation_recording_link, :target =>"_blank" %><%  end %></td>
+        <% end %>
         <% if current_user.has_role? :intended_recipient %>
         <td> <% if call_log.billing_summary_generated? %> <%= link_to("Delete", call_log_archive_path(call_log.id, archive: true), method: :post, :confirm => 'Are you sure?') %> | <% end %><%= link_to("Email", send_call_log_path(call_log.id), method: :get) %> </td>
         <% end %>

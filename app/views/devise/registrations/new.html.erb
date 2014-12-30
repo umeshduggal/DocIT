@@ -18,19 +18,21 @@
   </div>
   <div><%= f.label :practice_name %>
     <%= f.text_field :practice_name %></div>
-
-  <div class="left_field"><%= f.label :mobile_number, :class => "required" %><i>(Please enter valid number. This number will be verified later.)</i><br />
+<div class="row">
+  <div class="span5"><%= f.label :mobile_number, :class => "required" %><i>(Please enter valid number. This number will be verified later.)</i><br />
     <%= f.text_field :mobile_number, :type=> "tel",:maxlength => "14" %></div>
 
-<div class="right_field label_height"><%= f.label :mobile_number_confirmation, "Confirm Mobile number", :class => "required" %>
+<div class="span7"><%= f.label :mobile_number_confirmation, "Confirm Mobile number", :class => "required" %>
     <%= f.text_field :mobile_number_confirmation,:type=> "tel",:maxlength => "14" %></div>
-
-  <div class="left_field">
+</div>
+<div class="row">
+  <div class="span5">
     <%= f.label :email, :class => "required" %>
     <%= f.email_field :email %>
   </div>
-<div class="right_field"><%= f.label :email_confirmation, "Confirm Email", :class => "required" %>
+<div class="span7"><%= f.label :email_confirmation, "Confirm Email", :class => "required" %>
     <%= f.email_field :email_confirmation %> 
+</div>
 </div>
 
   <div><%= f.label :password, :class => "required" %> <% if @validatable %><i>(<%= @minimum_password_length %> characters minimum)</i><% end %><br />
@@ -69,7 +71,7 @@
     <%= builder.hidden_field :consultation_type_id, value: i  %>
     <%= builder.label :charges, ConsultationType.find(i).description, :class => "required" %>
        <div id="field_container">
-    <%= builder.text_field :charges %><span class="doller_sign">$</span>
+    <%= builder.number_field :charges %><span class="doller_sign">$</span>
     </div>
        <% i = i+1 %>
   </div>
@@ -110,7 +112,9 @@
   </div>
  <div>
    <div id="field_container">
-<%= f.check_box :terms_of_service %> &nbsp;I Agree to the Docit <%= link_to 'End User Licence Agreements(EULA)*', eula_url, :target => "_blank" %></div>
+<%= f.check_box :terms_of_service %> &nbsp;I Agree to the Docit <%= link_to 'End User Licence Agreements(EULA)*', eula_url, :target => "_blank" %>. 
+   Terms and conditions may vary at any time.
+   </div>
     <br></br>
  </div>
 
