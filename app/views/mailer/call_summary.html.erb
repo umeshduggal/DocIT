@@ -1,8 +1,9 @@
 <p>Hello <%= @to.name %>, 
 you have new phone consultations ready to be reviewed.</p>
 <br>
-<%= link_to("Enter Portal Here", call_logs_url) %>
-
+<center>
+<%= link_to image_tag(attachments['email_image.jpg'].url, :border => 0, :width=>"250px", :height=>"150px"), call_logs_url, :target =>"_blank" %>
+</center>
 <p><i>(By entering this portal, you are agreeing to comply with all patient confidentiality and privacy laws.)</i></p>
 
 </br>

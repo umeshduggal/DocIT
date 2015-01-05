@@ -1,7 +1,7 @@
 class CallLog < ActiveRecord::Base
   acts_as_paranoid
   attr_accessible :call_duration, :call_sid, :conversation_call_status, :conversation_recording_sid, :patient_identifier_recording_sid, 
-    :patient_mobile_number, :reason_for_consultation_recording_sid, :user_id, :conversation_call_duration, :call_status, :time_of_conversation, :archive
+    :patient_mobile_number, :reason_for_consultation_recording_sid, :user_id, :conversation_call_duration, :call_status, :time_of_conversation, :archive, :reviewed
   belongs_to :user
   has_one :billing_summary, :dependent => :destroy
   scope :call_log_billing_summary, lambda{ |str| { :includes=>[:billing_summary], :conditions => [ 'billing_summaries.datetime_constant= ?', "#{str}" ] } }

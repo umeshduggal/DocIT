@@ -17,10 +17,10 @@
       <% if current_user.has_role? :intended_recipient %>
       <th>Provider</th>
       <% end %>
-      <th>Patient Number</th>
       <th>Date & Time of conversation</th>
       <th>Duration of conversation(MM:SS)</th>
        <th>Billable Amount($)</th>
+       <th>Patient Number</th>
       <th>Patient Identifier </th>
       <th>Reason For Consultation</th>
       <% if current_user.has_role? :doctor %>
@@ -37,14 +37,19 @@
          <% if current_user.has_role? :intended_recipient %>
         <td><%= call_log.user.name %></td>
       <% end %>
-        <td><%= call_log.patient_mobile_number %></td>
         <td><%= call_log.conversation_datetime %></td>
         <td style="text-align: center"><%= Time.at(call_log.conversation_call_duration.to_i).utc.strftime("%M:%S") %></td>
         <td style="text-align: center"><%= call_log.billing_summary.billable_ammount rescue ''%></td>
+        <td><%= call_log.patient_mobile_number %></td>
         <td><% unless call_log.patient_identifier_link == '' %>
   <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.patient_identifier_link, :target =>"_blank" %><%  end %></td>
-        <td><% unless call_log.reason_for_consultation_link == '' %> 
-  <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.reason_for_consultation_link, :target =>"_blank" %><%  end %></td>
+        <td><% unless call_log.reason_for_consultation_link == '' %>
+          <% if current_user.has_role? :intended_recipient %>
+            <%= link_to image_tag(call_log.reviewed ? "green_sound.png" : "sound.png", :onclick=> call_log.reviewed ? "javascript:void(0);" : "update_call_log(this, #{call_log.id} );", :border => 0, :width=>"25px", :height=>"25px"), call_log.reason_for_consultation_link, :target =>"_blank" %>
+          <% else %>
+          <%= link_to image_tag(call_log.reviewed ? "green_sound.png" : "sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.reason_for_consultation_link, :target =>"_blank" %>
+        <%  end %>
+        <%  end %></td>
          <% if current_user.has_role? :doctor %>
         <td><% unless call_log.conversation_recording_link == '' %>
       <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.conversation_recording_link, :target =>"_blank" %><%  end %></td>
@@ -57,4 +62,18 @@
        <%= will_paginate @call_logs unless @call_logs.blank? %>
   </tbody>
 </table>
-
+  
+  <script type="text/javascript">
+    
+function update_call_log(obj, id) {
+    obj.srcset = "/assets/green_sound.png";
+    jQuery.ajax({
+            type: "POST",
+            url:"/call_log/"+ id +"/review/",
+            dataType: "json",
+            //data:,
+            success: function(data) {
+            }
+    });
+}
+  </script>

@@ -3,16 +3,24 @@ class CallLogController < ApplicationController
   def index
     @call_logs = []
     if current_user.has_role? :doctor
-      @call_logs = current_user.call_logs.where("archive=?",false).paginate(:page => params[:page], :per_page => 10).order("updated_at desc")
+      @call_logs = current_user.call_logs.where("archive=?",false).paginate(:page => params[:page], :per_page => 10).order("created_at desc")
     elsif current_user.has_role? :intended_recipient
       user_ids = IntendedRecipient.select(:user_id).where(:email => current_user.email).map(&:user_id)
-      @call_logs = CallLog.where(user_id: user_ids, archive: false).paginate(:page => params[:page], :per_page => 10).order("updated_at desc")
+      @call_logs = CallLog.where(user_id: user_ids, archive: false).paginate(:page => params[:page], :per_page => 10).order("created_at desc")
     end
   end
   
   def archive
     CallLog.find(params[:id]).update_attributes(:archive=> params[:archive])
     redirect_to call_logs_url
+  end
+  
+  def review
+    CallLog.find(params[:id]).update_attributes(:reviewed => true)
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { head :no_content  }
+    end
   end
   
   # GET /call_logs/1

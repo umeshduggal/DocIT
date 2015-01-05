@@ -39,6 +39,7 @@ devise_scope :user do
   resources :intended_recipients
   match '/call_logs' => 'call_log#index', :via => :get
   match '/call_log/:id/archive' => 'call_log#archive', :via => :post,:as => 'call_log_archive'
+  match '/call_log/:id/review' => 'call_log#review', :via => :post,:as => 'call_log_review'
   match '/call_logs/:id' => 'call_log#show', :via => :get,:as => 'show_call_logs'
   match '/send-call-log/:id' => 'call_log#send_call_log', :via => :get, :as => :send_call_log
   match '/send_call_log_mail' => 'call_log#send_call_log_mail', :via => :post
