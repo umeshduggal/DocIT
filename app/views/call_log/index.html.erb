@@ -17,10 +17,15 @@
       <% if current_user.has_role? :intended_recipient %>
       <th>Provider</th>
       <% end %>
+      <% if current_user.has_role? :doctor %>
+       <th>Patient Number </th>
+      <% end %>
       <th>Date & Time of conversation</th>
       <th>Duration of conversation(MM:SS)</th>
        <th>Billable Amount($)</th>
+      <% if current_user.has_role? :intended_recipient %>
        <th>Patient Number</th>
+      <% end %>
       <th>Patient Identifier </th>
       <th>Reason For Consultation</th>
       <% if current_user.has_role? :doctor %>
@@ -36,11 +41,16 @@
       <tr>
          <% if current_user.has_role? :intended_recipient %>
         <td><%= call_log.user.name %></td>
-      <% end %>
+        <% end %>
+        <% if current_user.has_role? :doctor %>
+          <td><%= call_log.patient_mobile_number %></td>
+        <% end %>
         <td><%= call_log.conversation_datetime %></td>
         <td style="text-align: center"><%= Time.at(call_log.conversation_call_duration.to_i).utc.strftime("%M:%S") %></td>
         <td style="text-align: center"><%= call_log.billing_summary.billable_ammount rescue ''%></td>
-        <td><%= call_log.patient_mobile_number %></td>
+        <% if current_user.has_role? :intended_recipient %>
+          <td><%= call_log.patient_mobile_number %></td>
+        <% end %>
         <td><% unless call_log.patient_identifier_link == '' %>
   <%= link_to image_tag("sound.png", :border => 0, :width=>"25px", :height=>"25px"), call_log.patient_identifier_link, :target =>"_blank" %><%  end %></td>
         <td><% unless call_log.reason_for_consultation_link == '' %>
