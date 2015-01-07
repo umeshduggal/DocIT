@@ -276,7 +276,7 @@ class Api::TwilioController < ApplicationController
     @language = params[:language]
     @call_log = CallLog.find(params[:call_id])
     @call_log.update_attributes(:time_of_conversation=>Time.now)
-    @recording_url = call_log.patient_identifier_link
+    @recording_url = @call_log.patient_identifier_link
     @post_to = BASE_URL + "/doctor_responce?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
     render :action => "patient_information.xml.builder", :layout => false
   end
