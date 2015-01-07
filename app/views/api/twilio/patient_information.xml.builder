@@ -4,6 +4,6 @@ xml.Response do
             :voice=>"woman", :language=> @language
     xml.Play @recording_url
     xml.Dial :action => @post_to, :timeout => "30",:record=> "true" do
-      xml.Conference "#{current_user.mobile_number}", :endConferenceOnExit => true
+      xml.Conference "#{@call_log.id}", :endConferenceOnExit => true
     end
 end
