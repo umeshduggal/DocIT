@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default :from => "DocIt@docitamerica.com",
+  default :from => "Docit@docitamerica.com",
           :reply_to => "help@docitamerica.com"
   
   def send_registration_link(user, to, content_type = 'text/html')
