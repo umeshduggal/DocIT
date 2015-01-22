@@ -4,64 +4,68 @@
   Use Font Awesome icons (default)
   To use Glyphicons sprites instead of Font Awesome, replace with "require twitter-bootstrap-static/sprites"
   =require twitter-bootstrap-static/fontawesome
-  */
-  body { padding-top: 60px; }
-  #logo{
-      width:130px;
-  }
-  #logo img{
-      width:130px;
-  }
-  #menu-menu{
-      padding-top: 35px;
-        padding-left: 30px;
-  }
-  #wrapper{
+*/
+body { padding-top: 60px; }
+#logo{
+    width:130px;
+}
+#logo img{
+    width:130px;
+}
+#menu-menu{
+    padding-top: 35px;
+    padding-left: 30px;
+}
+#wrapper{
     border-radius: 6px;
     clear: both;
     margin: 30px auto 50px auto;
     position: relative;
-  }
-  label.required:after{content:"*"}
-  .left_field {
-      float: left;
-      width: 40%;
-  }
-  .right_field{
-      float: left;
-      width: 60%;
-  }
-  .label_height label{
-      margin-bottom: 25px;
-  }
-  label {
-      cursor: default;
-  }
-  .doller_sign {
-     margin-left: 5px;
-     font-size: large;
-  }
-  #field_container {
-      float: left;
-      width: 100%;
-  }
-  #field_container .field_with_errors {
-      float: left;
-  }
-  #add-new{
-      margin-bottom: 10px;
-  }
-  .text-width{
-      width:85%;
-  }
-  .button-margin{
-      margin-right: 12%;
-  }
-  
-  .sign_up_link {
-text-decoration: none;
-text-shadow: 0 1px 0 #ffffff;
-  } 
-  .field_margin_bottom {
-       margin-bottom: 10px;  
-  }
+}
+label.required:after{content:"*"}
+.left_field {
+    float: left;
+    width: 40%;
+}
+.right_field{
+    float: left;
+    width: 60%;
+}
+.label_height label{
+    margin-bottom: 25px;
+}
+label {
+    cursor: default;
+}
+.doller_sign {
+    margin-left: 5px;
+    font-size: large;
+}
+#field_container {
+    float: left;
+    width: 100%;
+}
+#field_container .field_with_errors {
+    float: left;
+}
+#add-new{
+    margin-bottom: 10px;
+}
+.text-width{
+    width:85%;
+}
+.button-margin{
+    margin-right: 12%;
+}
+
+.sign_up_link {
+    text-decoration: none;
+    text-shadow: 0 1px 0 #ffffff;
+} 
+.field_margin_bottom {
+    margin-bottom: 10px;  
+}
+
+.footer_margin {
+    margin-left: 10px;  
+}
