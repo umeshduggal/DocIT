@@ -21,8 +21,8 @@
   <div class="row">
     <div class="span12 field_margin_bottom">
     <%= f.label :platform, :class => "required"%>
-    <%= f.radio_button :platform, 'android' %> Android
-    <%= f.radio_button :platform, 'ios' %> IOS
+    <%= f.radio_button :platform, 'android' %> <%= label_tag "user_platform_android", "Android", :class=>"radio_label" %>
+    <%= f.radio_button :platform, 'ios' %> <%= label_tag "user_platform_ios", "iOS", :class=>"radio_label" %>
   </div>
   </div>
 <div class="row">

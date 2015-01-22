@@ -65,7 +65,9 @@ label {
 .field_margin_bottom {
     margin-bottom: 10px;  
 }
-
 .footer_margin {
     margin-left: 10px;  
+}
+.radio_label {
+    display: inline;
 }

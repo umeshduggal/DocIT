@@ -6,82 +6,83 @@
   <div class="container">
     <div class="row-fluid">
       <% if current_user.has_role? :intended_recipient %>
-      <div class="span12" >
-      <% else %>
-        <div class="span6" style="padding-right:20px; border-right: 1px solid #ccc;">
-      <% end %>
-      
-   <div><%= f.label :first_name, :class => "required" %>
-  <%= f.text_field :first_name, autofocus: true %></div>
+        <div class="span12" >
+        <% else %>
+          <div class="span6" style="padding-right:20px; border-right: 1px solid #ccc;">
+          <% end %>
 
-   <div><%= f.label :last_name, :class => "required" %>
-  <%= f.text_field :last_name, autofocus: true %></div>
+          <div><%= f.label :first_name, :class => "required" %>
+            <%= f.text_field :first_name, autofocus: true %></div>
 
-<div><%= f.label :title %>
-  <%= f.collection_select(:title_id, Title.all, :id, :name, :prompt => 'Please select title') %>
-  </div>
+          <div><%= f.label :last_name, :class => "required" %>
+            <%= f.text_field :last_name, autofocus: true %></div>
 
- <div><%= f.label :practice_name %>
-  <%= f.text_field :practice_name %></div>
-  <div class="field_margin_bottom">
-    <%= f.label :platform, :class => "required"%>
-    <%= f.radio_button :platform, 'android' %> Android
-    <%= f.radio_button :platform, 'ios' %> IOS
-  </div>
-  
-  <div><%= f.label :email, :class => "required" %>
-  <%= f.email_field :email, autofocus: true %></div>
+          <div><%= f.label :title %>
+            <%= f.collection_select(:title_id, Title.all, :id, :name, :prompt => 'Please select title') %>
+          </div>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-  <% end %>
+          <div><%= f.label :practice_name %>
+            <%= f.text_field :practice_name %></div>
+          <% if current_user.has_role? :doctor %>
+            <div class="field_margin_bottom">
+              <%= f.label :platform, :class => "required"%>
+              <%= f.radio_button :platform, 'android' %> <%= label_tag "user_platform_android", "Android", :class=>"radio_label" %>
+              <%= f.radio_button :platform, 'ios' %> <%= label_tag "user_platform_ios", "iOS", :class=>"radio_label" %>
+            </div>
+          <% end %>
+          <div><%= f.label :email, :class => "required" %>
+            <%= f.email_field :email, autofocus: true %></div>
 
-  <div><%= f.label :password, :class => "required" %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "off" %></div>
+          <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+            <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+          <% end %>
 
-  <div><%= f.label :password_confirmation, :class => "required" %>
-    <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+          <div><%= f.label :password, :class => "required" %> <i>(leave blank if you don't want to change it)</i><br />
+            <%= f.password_field :password, autocomplete: "off" %></div>
 
-  <div><%= f.label :current_password, :class => "required" %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "off" %></div>
-    </div>
- <% if current_user.has_role? :doctor %>
-        <div class="span6">
-            <div class="container-content">
-                <div>
-    <section>
-      <%= content_tag :section, :class => "" do %>
-  <% field_set_tag "Assign your potential charges" do  -%>
-      <i>FYI- You will now establish your charges for phone consultations with your patients.  Your patients may opt to listen to these charges when DocIt is obtaining consent for the phone consultation.  Practices vary in terms of charging patients.  Many practices charge all patients, some charge selectively, and some only use DocIt for record keeping.  Charging is at the discretion of the practice and providers.  DocIt is not a billing company is held harmless in all billing related matters.  As a general rule, most practices charge 100-200x Medicare rates.
-        Assuming a model 200x Medicare: <br>
-99441= $28 allowing .4 RVU<br>
-99442= $53 allowing .77 RVU <br>
-99443= $80 allowing 1.14 RVU<br>
-</i>
-<br>
-  <% i = 1 %>
-  <%= f.fields_for :consultation_charges do |builder| %>
-     <div class="fields">
-    <%= builder.hidden_field :consultation_type_id, value: i  %>
-    <%= builder.label :charges, ConsultationType.find(i).description, :class => "required" %>
-       <div id="field_container">
-    <%= builder.number_field :charges %><span class="doller_sign">$</span>
-    </div>
-       <% i = i+1 %>
-  </div>
-    <% end %>
-  <% end %>
-     <% end %>
-    </section>
-  </div>
-              
-               </div>
+          <div><%= f.label :password_confirmation, :class => "required" %>
+            <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+
+          <div><%= f.label :current_password, :class => "required" %> <i>(we need your current password to confirm your changes)</i><br />
+            <%= f.password_field :current_password, autocomplete: "off" %></div>
         </div>
-  <% end %>
-        <hr></hr>
-  <div><%= f.submit "Update" %></div>
-    </div>
-    </div>
-<% end %>
+        <% if current_user.has_role? :doctor %>
+          <div class="span6">
+            <div class="container-content">
+              <div>
+                <section>
+                  <%= content_tag :section, :class => "" do %>
+                    <% field_set_tag "Assign your potential charges" do  -%>
+                      <i>FYI- You will now establish your charges for phone consultations with your patients.  Your patients may opt to listen to these charges when DocIt is obtaining consent for the phone consultation.  Practices vary in terms of charging patients.  Many practices charge all patients, some charge selectively, and some only use DocIt for record keeping.  Charging is at the discretion of the practice and providers.  DocIt is not a billing company is held harmless in all billing related matters.  As a general rule, most practices charge 100-200x Medicare rates.
+                        Assuming a model 200x Medicare: <br>
+                        99441= $28 allowing .4 RVU<br>
+                        99442= $53 allowing .77 RVU <br>
+                        99443= $80 allowing 1.14 RVU<br>
+                      </i>
+                      <br>
+                      <% i = 1 %>
+                      <%= f.fields_for :consultation_charges do |builder| %>
+                        <div class="fields">
+                          <%= builder.hidden_field :consultation_type_id, value: i  %>
+                          <%= builder.label :charges, ConsultationType.find(i).description, :class => "required" %>
+                          <div id="field_container">
+                            <%= builder.number_field :charges %><span class="doller_sign">$</span>
+                          </div>
+                          <% i = i+1 %>
+                        </div>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                </section>
+              </div>
 
-<%= link_to "Back", :back %>
+            </div>
+          </div>
+        <% end %>
+        <hr></hr>
+        <div><%= f.submit "Update" %></div>
+      </div>
+    </div>
+  <% end %>
+
+  <%= link_to "Back", :back %>
