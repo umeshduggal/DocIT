@@ -62,3 +62,6 @@
 text-decoration: none;
 text-shadow: 0 1px 0 #ffffff;
   } 
+  .field_margin_bottom {
+       margin-bottom: 10px;  
+  }

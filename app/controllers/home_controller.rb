@@ -23,6 +23,10 @@ class HomeController < ApplicationController
     send_file 'public/ABN.3.11.pdf'
   end
   
+  def download_android_app
+    send_file 'public/DocIt.apk'
+  end
+  
   def number_verification
     @user = User.where(id: params[:user_id]).first
     verified = @user.verification params[:verification_code]

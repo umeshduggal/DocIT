@@ -16,8 +16,15 @@
   <div><%= f.label :title %>
   <%= f.collection_select(:title_id, Title.all, :id, :name, :prompt => 'Please select title') %>
   </div>
-  <div><%= f.label :practice_name %>
+  <div ><%= f.label :practice_name %>
     <%= f.text_field :practice_name %></div>
+  <div class="row">
+    <div class="span12 field_margin_bottom">
+    <%= f.label :platform, :class => "required"%>
+    <%= f.radio_button :platform, 'android' %> Android
+    <%= f.radio_button :platform, 'ios' %> IOS
+  </div>
+  </div>
 <div class="row">
   <div class="span5"><%= f.label :mobile_number, :class => "required" %><i>(Please enter valid number. This number will be verified later.)</i><br />
     <%= f.text_field :mobile_number, :type=> "tel",:maxlength => "14" %></div>

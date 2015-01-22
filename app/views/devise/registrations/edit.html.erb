@@ -23,7 +23,12 @@
 
  <div><%= f.label :practice_name %>
   <%= f.text_field :practice_name %></div>
-
+  <div class="field_margin_bottom">
+    <%= f.label :platform, :class => "required"%>
+    <%= f.radio_button :platform, 'android' %> Android
+    <%= f.radio_button :platform, 'ios' %> IOS
+  </div>
+  
   <div><%= f.label :email, :class => "required" %>
   <%= f.email_field :email, autofocus: true %></div>
 
