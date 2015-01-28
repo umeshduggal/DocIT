@@ -33,6 +33,9 @@ devise_scope :user do
   match '/download_pdf' => 'home#download_pdf', :via => :get
   match '/download_android_app' => 'home#download_android_app', :via => :get
   match '/download_app' => 'home#download_app', :via => :get
+  match '/verification/new' => 'home#verification_new', :via => :get, :as=> :verification_new
+  match '/verification/resend' => 'home#resend_verification', :via => :post
+  match '/verification/:user_token' => 'home#mobile_number_verification', :via => :get, :as=> :verification
   match '/send_mail' => 'home#send_mail', :via => :post
   match 'home/verify' => 'home#number_verification', :via => :post
   match 'billing_managers' => 'intended_recipients#index', :via => :get, :as => :billing_manager

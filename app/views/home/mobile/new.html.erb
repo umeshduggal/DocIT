@@ -1,0 +1,22 @@
+<h2>Resend verification code</h2>
+<%= form_tag({:controller => "home", :action => "resend_verification"}, {:id=> 'resend_code'}) do %>		  
+  <div class="field"><%= label_tag :mobile_number %>
+    <%= text_field_tag 'mobile_number', nil, autofocus: true %>
+  </div>
+  <div class="actions" style="overflow: hidden">
+    	<%= submit_tag 'Resend verfication code', {:class=>"btn btn-success", :style=>"float:left"} %>
+  </div>
+  <% end %>
+
+ 
+<script type="text/javascript">
+  $(document).ready(function () {
+  $("#resend_code").validate({
+    debug: true,
+    rules: {
+    "mobile_number": {required: true}
+    }
+    , submitHandler: function(form) { form.submit(); } 
+  });
+});
+</script>

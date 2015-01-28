@@ -95,9 +95,13 @@ class RegistrationsController < Devise::RegistrationsController
 
   
   protected
-
-  def after_sign_up_path_for(resource)
-    root_url
+  
+  def after_inactive_sign_up_path_for(resource)
+    verification_path(resource.authentication_token)
   end
+  
+#  def after_sign_up_path_for(resource)
+#    verification_path(resource.authentication_token)
+#  end
   
 end

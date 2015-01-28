@@ -37,6 +37,28 @@ class User < ActiveRecord::Base
   def send_welcome_email
     if self.has_role? :doctor 
       UserMailer.welcome_email(self).deliver
+      begin
+        # Instantiate a Twilio client
+        client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
+        # Create and send an SMS message
+        link = ""
+        if self.platform == "android"
+          link = "http://tinyurl.com/kp47u6a"
+        elsif self.platform == "ios"
+          link = "http://tinyurl.com/n54nbem"
+        end
+        Rails.logger.info link.inspect
+        response = client.account.sms.messages.create(
+          from: TWILIO_CONFIG['from'],
+          to: self.mobile_number,
+          body: "Please download the app from following link: #{link}"
+        )
+
+      rescue StandardError => msg
+        Rails.logger.info "---- Twilio send sms error -----"
+        Rails.logger.info msg.inspect
+        Rails.logger.info "---- Twilio send sms error -----"
+      end 
     end
   end
   
