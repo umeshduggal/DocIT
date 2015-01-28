@@ -32,6 +32,13 @@ class User < ActiveRecord::Base
   belongs_to :title
   #belongs_to :parent, :class_name => "User" 
  
+  after_save :send_welcome_email, :if => proc { |l| l.confirmed_at_changed? && l.confirmed_at_was.nil? }
+  
+  def send_welcome_email
+    if self.has_role? :doctor 
+      UserMailer.welcome_email(self).deliver
+    end
+  end
   
   def check_user_role
     self.assignments.each do |a|

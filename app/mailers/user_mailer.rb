@@ -44,4 +44,11 @@ class UserMailer < ActionMailer::Base
     mail(:to => "#{params[:email]}", :subject => "Call Log Detail", template_path: 'mailer', template_name: 'call_log_detail')
   end
   
+  def welcome_email(to, content_type = 'text/html')
+    @email = to.email
+    @user = to
+    @content_type = content_type
+    mail(:to => "#{@email}", :subject => "Download app", template_path: 'mailer', template_name: 'welcome_email')
+  end
+  
 end

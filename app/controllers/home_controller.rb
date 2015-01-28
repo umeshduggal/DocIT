@@ -2,7 +2,7 @@
 # and open the template in the editor.
 
 class HomeController < ApplicationController
-  skip_before_filter :authenticate_user!, :only => [:index, :eula, :contact_us, :about_us, :send_mail, :info_for_billers_coders,:download_pdf]
+  skip_before_filter :authenticate_user!, :only => [:index, :eula, :contact_us, :about_us, :send_mail, :info_for_billers_coders, :download_pdf, :download_android_app]
   
   def index
   end
