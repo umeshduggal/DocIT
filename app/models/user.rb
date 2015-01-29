@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
         response = client.account.sms.messages.create(
           from: TWILIO_CONFIG['from'],
           to: self.mobile_number,
-          body: "Please download the app from following link: #{link}"
+          body: "http://docitamerica.com/  Please download the app from following link: #{link}"
         )
 
       rescue StandardError => msg

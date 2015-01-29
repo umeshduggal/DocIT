@@ -1,5 +1,14 @@
 <section>
-  <h1>Introduction </h1>
+  <h1 class="inline-block">Introduction 
+  
+  <div class="pull-right">
+    <% if current_user && current_user.platform == "android" %>
+          <%= link_to('Download app', download_android_app_path, class: "btn btn-large btn-primary") %>
+          <% elsif current_user && current_user.platform == "ios" %>
+          <%= link_to('Download app', "https://itunes.apple.com/us/app/docitamerica/id956068749?ls=1&mt=8", target: "_blank", class: "btn btn-large btn-primary") %>
+        <% end %>    
+  </div>
+    </h1>
   <p>
     Docit is an App that allows medical professionals to document and generate income for phone conversations with patients.  The system is incredibly simple to use.  Signing up takes less than 2 minutes, and the App will appear on your mobile device. All you have to do is call your patient and Docit will do everything else.  From there, Docit will block your number.   Docit will authenticate your patient and attain their consent.  When the patient is ready, Docit will call you back with the patient for a phone consultation.  When you’re done, Docit will automatically send a detailed summary of the conversation to your practice biller.  The system is the only way to legally and ethically document and potentially charge patients for phone conversation, in an effortless manner.   No matter what time of day or night, DocIt will convert your mobile device into a powerful practice solution.  Remember- your time is precious, your medical advice is worth something.
     Sign Up Now!
@@ -7,7 +16,7 @@
   <h2>New Users 
   <%= link_to "Sign Up", new_user_registration_url, class: "sign_up_link"%> Here</h2>
   <h2>Contact a Representative: 866-988-3767 </h2>
-    <div><p> <%= link_to "Download App", download_app_url %></p></div>
+    
      <div><b><abbr title="Email">Email:</abbr></b><p> <a href="mailto:help@docitamerica.com">help@docitamerica.com</a></p></div>
      <div><b><abbr title="Fax">Fax:</abbr></b><p style="color: #0088cc">866-988-3767</p></div>
   <p>

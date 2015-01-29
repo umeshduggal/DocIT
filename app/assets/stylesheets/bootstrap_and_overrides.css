@@ -71,3 +71,10 @@ label {
 .radio_label {
     display: inline;
 }
+.inline-block {
+    width: 100%;
+    display: inline-block;
+}
+.pull-right {
+    float: right;
+}

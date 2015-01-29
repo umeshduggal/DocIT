@@ -70,9 +70,6 @@
                     <ul class="dropdown-menu" role="menu">
                       <li><%= link_to "Edit Profile", edit_user_registration_url %></li>
                       <li><%= link_to "View Call Log", call_logs_url %></li>
-                      <% if current_user.has_role? :doctor %>
-                        <li><%= link_to "Download App", download_app_url %></li>
-                      <% end %>
                       <li class="divider"></li>
                       <li><%= link_to "Sign Out", destroy_user_session_path, :method=> :delete  %></li>
                     </ul>
