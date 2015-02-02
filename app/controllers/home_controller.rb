@@ -76,12 +76,17 @@ class HomeController < ApplicationController
       redirect_to :back
       return
     else
+      # Create and send an SMS message
+      verification_number = rand.to_s[2...8]
+      Rails.logger.info "verification_number #{verification_number}"
+      User.update_all({:verification_code => verification_number},
+                   ['mobile_number = ?', "#{params[:mobile_number]}"])
+      #@user.update_attributes(:verification_code => verification_number) 
       begin
         # Instantiate a Twilio client
         client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
-        # Create and send an SMS message
-        verification_number = rand.to_s[2...8]
-        @user.update_attributes(:verification_code => verification_number) 
+        
+        
         response = client.account.sms.messages.create(
           from: TWILIO_CONFIG['from'],
           to: @user.mobile_number,
@@ -95,7 +100,7 @@ class HomeController < ApplicationController
       end
       flash[:notice] = 'Verification code has been sent.'
     end
-    redirect_to verification_url(@user.authentication_token)
+    redirect_to root_url
   end
 
 
