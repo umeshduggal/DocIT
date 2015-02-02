@@ -78,3 +78,9 @@ label {
 .pull-right {
     float: right;
 }
+@media screen and (max-width: 768px) {
+    h1.inline-block{
+        font-size:18px;
+    }
+}
+
