@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable :trackable,
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable,  :validatable, :confirmable, :lockable
+         :recoverable, :rememberable,  :validatable, :lockable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :remember_me, :practice_name, :mobile_number, :verification_code, :verified, :parent_id,
@@ -32,35 +32,35 @@ class User < ActiveRecord::Base
   belongs_to :title
   #belongs_to :parent, :class_name => "User" 
  
-  after_save :send_welcome_email, :if => proc { |l| l.confirmed_at_changed? && l.confirmed_at_was.nil? }
+  #after_save :send_welcome_email, :if => proc { |l| l.confirmed_at_changed? && l.confirmed_at_was.nil? }
   
-  def send_welcome_email
-    if self.has_role? :doctor 
-      UserMailer.welcome_email(self).deliver
-      begin
-        # Instantiate a Twilio client
-        client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
-        # Create and send an SMS message
-        link = ""
-        if self.platform == "android"
-          link = "http://tinyurl.com/kp47u6a"
-        elsif self.platform == "ios"
-          link = "http://tinyurl.com/n54nbem"
-        end
-        Rails.logger.info link.inspect
-        response = client.account.sms.messages.create(
-          from: TWILIO_CONFIG['from'],
-          to: self.mobile_number,
-          body: "http://docitamerica.com/  Please download the app from following link: #{link}"
-        )
-
-      rescue StandardError => msg
-        Rails.logger.info "---- Twilio send sms error -----"
-        Rails.logger.info msg.inspect
-        Rails.logger.info "---- Twilio send sms error -----"
-      end 
-    end
-  end
+#  def send_welcome_email
+#    if self.has_role? :doctor 
+#      UserMailer.welcome_email(self).deliver
+#      begin
+#        # Instantiate a Twilio client
+#        client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
+#        # Create and send an SMS message
+#        link = ""
+#        if self.platform == "android"
+#          link = "http://tinyurl.com/kp47u6a"
+#        elsif self.platform == "ios"
+#          link = "http://tinyurl.com/n54nbem"
+#        end
+#        Rails.logger.info link.inspect
+#        response = client.account.sms.messages.create(
+#          from: TWILIO_CONFIG['from'],
+#          to: self.mobile_number,
+#          body: "http://docitamerica.com/  Please download the app from following link: #{link}"
+#        )
+#
+#      rescue StandardError => msg
+#        Rails.logger.info "---- Twilio send sms error -----"
+#        Rails.logger.info msg.inspect
+#        Rails.logger.info "---- Twilio send sms error -----"
+#      end 
+#    end
+#  end
   
   def check_user_role
     self.assignments.each do |a|

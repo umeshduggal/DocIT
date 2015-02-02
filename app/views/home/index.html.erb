@@ -1,6 +1,7 @@
 <% if user_signed_in? %>
     <% unless current_user.verified? %>
       <%= render "verify_number_form" %>
+    <%= link_to "Didn't receive verification code?", verification_new_url, class: "sign_up_link"%>
     <% else %>
       <% if current_user.has_role? :doctor %>
         <%= render "home_page" %>

@@ -33,7 +33,30 @@ class HomeController < ApplicationController
     @user = User.where(id: params[:user_id]).first
     verified = @user.verification params[:verification_code]
     if verified
-      flash[:notice] = 'Mobile Number verified sucessfully.'
+      UserMailer.welcome_email(@user).deliver
+      begin
+        # Instantiate a Twilio client
+        client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
+        # Create and send an SMS message
+        link = ""
+        if @user.platform == "android"
+          link = "http://tinyurl.com/kp47u6a"
+        elsif @user.platform == "ios"
+          link = "http://tinyurl.com/n54nbem"
+        end
+        Rails.logger.info link.inspect
+        response = client.account.sms.messages.create(
+          from: TWILIO_CONFIG['from'],
+          to: @user.mobile_number,
+          body: "http://docitamerica.com/  Please download the app from following link: #{link}"
+        )
+
+      rescue StandardError => msg
+        Rails.logger.info "---- Twilio send sms error -----"
+        Rails.logger.info msg.inspect
+        Rails.logger.info "---- Twilio send sms error -----"
+      end
+      flash[:notice] = 'You are now registered with Docit. If you are on your smartphone, Please Download the App by pressing the link below. You must be on your smartphone to download the App. If you are not on your smartphone, please go to your smartphone, and open www.docitamerica.com and Sign In. Once you Sign In, you will see the link to Download the Application.'
     else
       flash[:error] = 'Verification code is not valid.'
       redirect_to :back
