@@ -26,7 +26,7 @@ class HomeController < ApplicationController
   end
   
   def download_android_app
-    send_file 'public/DocIt.apk'
+    send_file 'public/DocIt.apk', :type => 'application/vnd.android.package-archive', :disposition => "attachment"
   end
   
   def number_verification
