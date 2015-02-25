@@ -1,6 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
   def new
-    @credit_card_detail = CreditCardDetail.new
+    #@credit_card_detail = CreditCardDetail.new
     build_resource({})
     @validatable = devise_mapping.validatable?
     if @validatable
@@ -13,11 +13,11 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def create
-    @credit_card_detail = CreditCardDetail.new(params[:credit_card_detail])
+    #@credit_card_detail = CreditCardDetail.new(params[:credit_card_detail])
     build_resource(sign_up_params)   
     custom_errors = nil
     
-    if resource.valid? && @credit_card_detail.valid?
+    if resource.valid? # && @credit_card_detail.valid?
       if params[:user][:mobile_number].length == 10
         params[:user][:mobile_number] = "+1".concat(params[:user][:mobile_number])
         params[:user][:mobile_number_confirmation] = "+1".concat(params[:user][:mobile_number_confirmation])
@@ -29,13 +29,13 @@ class RegistrationsController < Devise::RegistrationsController
       end
       @subscription =  Subscription.where(:email => params[:user][:email], :completed => true).first
       if @subscription.blank?
-        @client_profile, @subscription  = @credit_card_detail.create_payment_profile params
+        #@client_profile, @subscription  = @credit_card_detail.create_payment_profile params
       end
-      if @subscription.completed
+      if  true
         super
         unless resource.id.nil?
-          @subscription.user_id = resource.id
-          @subscription.save!   
+#          @subscription.user_id = resource.id
+#          @subscription.save!   
           begin
             # Instantiate a Twilio client
             client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
@@ -60,12 +60,13 @@ class RegistrationsController < Devise::RegistrationsController
         custom_errors = @client_profile.collect { |e| e.LongMessage }
       end
     else
-      @credit_card_detail.valid?
-      unless @credit_card_detail.errors.full_messages.blank?
-        custom_errors = @credit_card_detail.errors.full_messages
-      else
-        custom_errors = []
-      end
+#      @credit_card_detail.valid?
+#      unless @credit_card_detail.errors.full_messages.blank?
+#        custom_errors = @credit_card_detail.errors.full_messages
+#      else
+#        custom_errors = []
+#      end
+       custom_errors = []
     end
     
     unless custom_errors.nil?

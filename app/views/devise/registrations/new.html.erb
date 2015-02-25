@@ -87,36 +87,36 @@
      <% end %>
     </section>
   </div>
-  <div>
-    <section>
-      <%= content_tag :section, :class => "" do %>
-        <% field_set_tag "Credit Card Detail for Monthly Subscription" do  -%>
+  <%#*<div>%>
+    <%#*<section>%>
+      <%#= content_tag :section, :class => "" do %>
+        <%# field_set_tag "Credit Card Detail for Monthly Subscription" do  -%>
       
-          <% fields_for @credit_card_detail do |cc| -%>
-      <i>This credit card will be charged $20/month for UNLIMITED phone consultations.  Storage is FREE.  You may cancel any time.</i><br></br>
-            <div class="boxes">
-              <div><%= cc.label :credit_card_type, :class => "required" %>
-                <%= cc.select :credit_card_type, options_for_select(["Visa","MasterCard","Discover","Amex","Switch","Solo","Maestro"]), :include_blank => true %></div>
+          <%# fields_for @credit_card_detail do |cc| -%>
+      <%#*<i>This credit card will be charged $20/month for UNLIMITED phone consultations.  Storage is FREE.  You may cancel any time.</i><br></br>%>
+            <%#*<div class="boxes">%>
+              <%#*<div><%= cc.label :credit_card_type, :class => "required" %>
+                <%#= cc.select :credit_card_type, options_for_select(["Visa","MasterCard","Discover","Amex","Switch","Solo","Maestro"]), :include_blank => true %>
 
-              <div><%= cc.label :credit_card_number, :class => "required" %>
-                <%= cc.text_field :credit_card_number, autocomplete: "off" %></div>
-              <div><%= cc.label :exp_month, :class => "required" %>
-              <%= select_month(14, :field_name => 'exp_month', :prefix => 'credit_card_detail',:use_month_numbers => true, :prompt => true) %>      
+              <%#*<div><%= cc.label :credit_card_number, :class => "required" %>
+                <%#= cc.text_field :credit_card_number, autocomplete: "off" %>
+              <%#*<div><%= cc.label :exp_month, :class => "required" %>
+              <%#= select_month(14, :field_name => 'exp_month', :prefix => 'credit_card_detail',:use_month_numbers => true, :prompt => true) %>      
         
-              </div>
-              <div><%= cc.label :exp_year, :class => "required" %>
-                <%= select_year(Date.today, :field_name => 'exp_year', :prefix => 'credit_card_detail', :start_year => Time.now.year,:end_year => Time.now.year+10, :prompt => true)  %>
+              <%#*</div>%>
+              <%#*<div><%= cc.label :exp_year, :class => "required" %>
+                <%#= select_year(Date.today, :field_name => 'exp_year', :prefix => 'credit_card_detail', :start_year => Time.now.year,:end_year => Time.now.year+10, :prompt => true)  %>
                 <%#= cc.text_field :exp_year, autocomplete: "off" %>
-              </div>
-              <div><%= cc.label :CVV, 'CVV', :class => "required" %>
-                <%= cc.password_field :CVV, autocomplete: "off" %></div>
+              <%#*</div>%>
+              <%#*<div><%= cc.label :CVV, 'CVV', :class => "required" %>
+                <%#= cc.password_field :CVV, autocomplete: "off" %>
 
-            </div>
-          <% end %>
-        <% end %>
-      <% end %>
-    </section>
-  </div>
+            <%#*</div>%>
+          <%# end %>
+        <%# end %>
+      <%# end %>
+    <%#*</section>%>
+  <%#*</div>%>
  <div>
    <div id="field_container">
 <%= f.check_box :terms_of_service %> &nbsp;I Agree to the Docit <%= link_to 'End User Licence Agreements(EULA)*', eula_url, :target => "_blank" %>. 
