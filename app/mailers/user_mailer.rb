@@ -22,7 +22,7 @@ class UserMailer < ActionMailer::Base
     #BillingSummary.where("created_at >= ?", Time.zone.now.beginning_of_day)
     #@call_logs = user.call_logs.includes(:billing_summary).where("billing_summaries.datetime_constant= ?", datetime_cont).order("call_logs.updated_at desc")
     attachments.inline['email_image.jpg'] = File.read("#{Rails.root}/public/assets/email_logo.jpg")
-    #@email = to.email
+    @email = to.email
     #@id = to.id
     @content_type = content_type
     unless @call_logs.blank?
