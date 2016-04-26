@@ -43,6 +43,13 @@ namespace "Docit" do
           end
         end
         puts ""
+        #updated dr to doctor
+        obj = Title.find_by_name('Dr')
+        unless obj.nil?
+          obj.update_attribute :name, "Doctor"
+          puts "Title updated"
+        end
+        
       end
       
     task :consultation_type => :environment do

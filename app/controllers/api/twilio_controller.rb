@@ -209,6 +209,7 @@ class Api::TwilioController < ApplicationController
   end
   
   def patient_responce
+    Rails.logger.info "Patient response called"
     @language = params[:language]
     if params['Digits'] == '9'
       redirect_to :action => 'patient_call', :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token]
@@ -231,6 +232,7 @@ class Api::TwilioController < ApplicationController
     end
     
     if params['Digits'] == '1'
+      Rails.logger.info "Doctor is called"
       attempt = params[:attempt] || "first"
       patient_number = params[:patient_number] || params['Called']
       @patient_info_url = BASE_URL + "/patient_information?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"

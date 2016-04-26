@@ -33,7 +33,7 @@ namespace :docit do
         u.intended_recipients.each do |ir|
             if ir.registered?
               UserMailer.send_billing_summary(u, ir, DATETIME_CONST).deliver
-              puts "sent mail to #{ir.email} successfully"
+              puts "sent mail to #{ir.email} successfully at #{Time.zone.now}"
             end
           end
       end
