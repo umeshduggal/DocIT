@@ -300,9 +300,31 @@ class Api::TwilioController < ApplicationController
     Rails.logger.info params.inspect
     if params[:attempt] == "first" and status_list.include? params[:CallStatus] 
       Rails.logger.info "making second attempt to Doctor"
-      #sleep(5)
+      sleep(5)
       Rails.logger.info "making second attempt to Doctor"
-      redirect_to controller: 'api/twilio', :action => 'patient_responce', :Digits => 1, :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language], :attempt => "second", :patient_number => params[:patient_number]
+      #redirect_to controller: 'api/twilio', :action => 'patient_responce', :Digits => 1, :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language], :attempt => "second", :patient_number => params[:patient_number]
+      Rails.logger.info "second time doctor is called"
+      attempt = "second"
+      patient_number = params[:patient_number] || params['Called']
+      @patient_info_url = BASE_URL + "/patient_information?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}"
+      @doctor_call_status = BASE_URL + "/doctor_call_status?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{params[:language]}&patient_number=#{patient_number.strip}&attempt=#{attempt}"
+      @call_log_id = params[:call_id]
+      data = {
+        :from => TWILIO_CONFIG['from'],
+        :to => current_user.mobile_number,
+        :url => @patient_info_url,
+        :IfMachine => 'Hangup',
+        :StatusCallback => @doctor_call_status
+      }
+      begin
+        client = Twilio::REST::Client.new(TWILIO_CONFIG['sid'], TWILIO_CONFIG['token'])
+        client.account.calls.create data
+      rescue StandardError => msg
+        Rails.logger.info "Error--- "
+        Rails.logger.info "Error--- #{msg.inspect}"
+        Rails.logger.info "Error--- "
+      end
+      render :action => "doctor_call.xml.builder", :layout => false
       return
     end
     client = Twilio::REST::Client.new TWILIO_CONFIG['sid'], TWILIO_CONFIG['token']
