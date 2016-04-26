@@ -300,9 +300,9 @@ class Api::TwilioController < ApplicationController
     Rails.logger.info params.inspect
     if params[:attempt] == "first" and status_list.include? params[:CallStatus] 
       Rails.logger.info "making second attempt to Doctor"
-      sleep(5)
+      #sleep(5)
       Rails.logger.info "making second attempt to Doctor"
-      redirect_to :action => 'patient_responce', :Digits => 1, :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language], :attempt => "second", :patient_number => params[:patient_number]
+      redirect_to controller: 'api/twilio', :action => 'patient_responce', :Digits => 1, :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language], :attempt => "second", :patient_number => params[:patient_number]
       return
     end
     client = Twilio::REST::Client.new TWILIO_CONFIG['sid'], TWILIO_CONFIG['token']
