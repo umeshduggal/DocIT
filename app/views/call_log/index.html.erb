@@ -10,6 +10,12 @@
     v.	Consult >30min= 99499
   </i>
 </div>
+<%= form_tag call_logs_path, :method => 'get', :id => "call_logs_search" do %>
+  <div class="pull-right">
+    <%= text_field_tag :search, params[:search], :placeholder => 'Enter Mobile Number' %>
+    <%= submit_tag "Search", :name => nil %>
+  </div>
+  
 
 <table class="table table-hover table-condensed table-bordered table-striped">
   <thead>
@@ -72,7 +78,7 @@
        <%= will_paginate @call_logs unless @call_logs.blank? %>
   </tbody>
 </table>
-  
+  <% end %>
   <script type="text/javascript">
     
 function update_call_log(obj, id) {

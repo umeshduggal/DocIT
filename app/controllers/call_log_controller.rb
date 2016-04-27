@@ -3,10 +3,10 @@ class CallLogController < ApplicationController
   def index
     @call_logs = []
     if current_user.has_role? :doctor
-      @call_logs = current_user.call_logs.with_deleted.where("archive=? and created_at > ?",false, 10.years.ago).paginate(:page => params[:page], :per_page => 10).order("created_at desc")
+      @call_logs = current_user.call_logs.with_deleted.where("archive= ? and created_at > ? and patient_mobile_number LIKE ?",false, 10.years.ago, "%#{params[:search]}%").paginate(:page => params[:page], :per_page => 10).order("created_at desc")
     elsif current_user.has_role? :intended_recipient
       user_ids = IntendedRecipient.select(:user_id).where(:email => current_user.email).map(&:user_id)
-      @call_logs = CallLog.where(user_id: user_ids, archive: false).paginate(:page => params[:page], :per_page => 10).order("created_at desc")
+      @call_logs = CallLog.where("user_id IN (?) and archive= ? and patient_mobile_number LIKE ?", user_ids, false, "%#{params[:search]}%").paginate(:page => params[:page], :per_page => 10).order("created_at desc")
     end
   end
   

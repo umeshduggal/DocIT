@@ -25,9 +25,9 @@ class UserMailer < ActionMailer::Base
     @email = to.email
     #@id = to.id
     @content_type = content_type
-    unless @call_logs.blank?
+    #unless @call_logs.blank?
       mail(:to => "#{@email}", :subject => "Billing Summary", template_path: 'mailer', template_name: 'call_summary')
-    end 
+    #end 
   end
   
   def send_feedback(to, params, content_type = 'text/html')
