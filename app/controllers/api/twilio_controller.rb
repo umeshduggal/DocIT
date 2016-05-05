@@ -37,8 +37,9 @@ class Api::TwilioController < ApplicationController
     rescue StandardError => msg
       render :status => 401,
         :json => { :success => false,
-        :info => "Error #{msg}",
+        :info => "Error: #{msg}",
         :data => {} }
+        call_log.update_attributes(:call_status => "Completed with error.")
       return
     end
     render :status => 200,
