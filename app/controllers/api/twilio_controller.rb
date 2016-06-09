@@ -302,7 +302,7 @@ class Api::TwilioController < ApplicationController
     Rails.logger.info "call status = " + params[:CallStatus]
     Rails.logger.info params[:CallDuration].inspect
     @call_log = CallLog.find(params[:call_id])
-    identifier_recording_duration = @call_log.identifier_recording_duration.to_i + 5 #added some extra time as doctor listen recording and ivr message 
+    recording_duration = @call_log.identifier_recording_duration.to_i + 5 #added some extra time as doctor listen recording and ivr message 
     Rails.logger.info recording_duration.inspect
     if params[:attempt] == "first" and (status_list.include? params[:CallStatus] or (params[:CallStatus] == "completed" and params[:CallDuration].to_i < recording_duration)) 
       Rails.logger.info "making second attempt to Doctor"
