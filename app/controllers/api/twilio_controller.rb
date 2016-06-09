@@ -124,7 +124,7 @@ class Api::TwilioController < ApplicationController
     @post_to = BASE_URL + "/patient_identifier_record?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}"
     @redirect_to = BASE_URL + "/patient_identifier?call_id=#{params[:call_id]}&user_email=#{params[:user_email]}&user_token=#{params[:user_token]}&language=#{@language}&repeat=#{2}"
     if params['Digits'] == '2'
-      CallLog.find(params[:call_id]).update_attributes(:patient_identifier_recording_sid => params[:RecordingSid])
+      CallLog.find(params[:call_id]).update_attributes(:patient_identifier_recording_sid => params[:RecordingSid],:identifier_recording_duration => params[:RecordingDuration])
       redirect_to :action => 'patient_reason', :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language]
     else
       if @language == "es-ES"
@@ -299,7 +299,11 @@ class Api::TwilioController < ApplicationController
     @language = params[:language]
     status_list = ["busy", "no-answer", "failed", "canceled"]
     Rails.logger.info params.inspect
-    if params[:attempt] == "first" and status_list.include? params[:CallStatus] 
+    Rails.logger.info "call status = " + params[:CallStatus]
+    Rails.logger.info "call duration = " + params[:CallDuration]
+    @call_log = CallLog.find(params[:call_id])
+    recording_duration = @call_log.identifier_recording_duration.to_i + 5
+    if params[:attempt] == "first" and (status_list.include? params[:CallStatus] or (params[:CallStatus] == "completed" and params[:CallDuration] > recording_duration) ) 
       Rails.logger.info "making second attempt to Doctor"
       sleep(5)
       Rails.logger.info "making second attempt to Doctor"
