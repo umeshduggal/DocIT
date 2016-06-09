@@ -302,9 +302,9 @@ class Api::TwilioController < ApplicationController
     Rails.logger.info "call status = " + params[:CallStatus]
     Rails.logger.info params[:CallDuration].inspect
     @call_log = CallLog.find(params[:call_id])
-    recording_duration = @call_log.identifier_recording_duration.to_i + 5
+    identifier_recording_duration = @call_log.identifier_recording_duration.to_i + 5 #added some extra time as doctor listen recording and ivr message 
     Rails.logger.info recording_duration.inspect
-    if params[:attempt] == "first" and (status_list.include? params[:CallStatus] or (params[:CallStatus] == "completed" and params[:CallDuration].to_i < recording_duration) ) 
+    if params[:attempt] == "first" and (status_list.include? params[:CallStatus] or (params[:CallStatus] == "completed" and params[:CallDuration].to_i < recording_duration)) 
       Rails.logger.info "making second attempt to Doctor"
       sleep(5)
       Rails.logger.info "making second attempt to Doctor"
@@ -334,7 +334,7 @@ class Api::TwilioController < ApplicationController
       return
     end
     client = Twilio::REST::Client.new TWILIO_CONFIG['sid'], TWILIO_CONFIG['token']
-    if status_list.include? params[:CallStatus]
+    if params[:attempt] == "second" and (status_list.include? params[:CallStatus] or (params[:CallStatus] == "completed" and params[:CallDuration].to_i < recording_duration) ) 
       CallLog.find(params[:call_id]).update_attributes(:conversation_call_status =>params[:CallStatus])
       unless params[:patient_number].start_with?("+")
         params[:patient_number] = "+"+params[:patient_number]
