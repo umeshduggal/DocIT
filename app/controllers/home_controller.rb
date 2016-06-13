@@ -40,7 +40,7 @@ class HomeController < ApplicationController
         # Create and send an SMS message
         link = ""
         if @user.platform == "android"
-          link = "http://tinyurl.com/kp47u6a"
+          link = "http://tinyurl.com/hepl9ol"
         elsif @user.platform == "ios"
           link = "http://tinyurl.com/n54nbem"
         end
@@ -48,7 +48,7 @@ class HomeController < ApplicationController
         response = client.account.sms.messages.create(
           from: TWILIO_CONFIG['from'],
           to: @user.mobile_number,
-          body: "http://docitamerica.com/  Please download the app from following link: #{link}"
+          body: "https://docitamerica.com/  Please download the app from following link: #{link}"
         )
 
       rescue StandardError => msg

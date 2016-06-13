@@ -4,7 +4,7 @@
 class Api::TwilioController < ApplicationController
   
   # base URL of this application
-  BASE_URL = "http://www.docitamerica.com/api/twilio"
+  BASE_URL = "https://www.docitamerica.com/api/twilio"
   #BASE_URL = "http://5478fd2b.ngrok.com/api/twilio"
   # Use the Twilio REST API to initiate an outgoing call
   def makecall
