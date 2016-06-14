@@ -3,7 +3,7 @@
   
   <div class="pull-right">
     <% if current_user && current_user.platform == "android" %>
-          <%= link_to('Download app', "http://tinyurl.com/kp47u6a", class: "btn btn-large btn-primary") %>
+          <%= link_to('Download app', download_android_app_path, class: "btn btn-large btn-primary") %>
           <% elsif current_user && current_user.platform == "ios" %>
           <%= link_to('Download app', "https://itunes.apple.com/us/app/docitamerica/id956068749?ls=1&mt=8", target: "_blank", class: "btn btn-large btn-primary") %>
         <% end %>    
