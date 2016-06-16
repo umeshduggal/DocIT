@@ -306,7 +306,7 @@ class Api::TwilioController < ApplicationController
     Rails.logger.info recording_duration.inspect
     if params[:attempt] == "first" and (status_list.include? params[:CallStatus] or (params[:CallStatus] == "completed" and params[:CallDuration].to_i < recording_duration)) 
       Rails.logger.info "making second attempt to Doctor"
-      sleep(5)
+      sleep(60)
       Rails.logger.info "making second attempt to Doctor"
       #redirect_to controller: 'api/twilio', :action => 'patient_responce', :Digits => 1, :call_id=> params[:call_id], :user_email=> params[:user_email],:user_token=>params[:user_token], :language => params[:language], :attempt => "second", :patient_number => params[:patient_number]
       Rails.logger.info "second time doctor is called"
@@ -342,14 +342,14 @@ class Api::TwilioController < ApplicationController
 
       response = client.account.sms.messages.create(
         from: TWILIO_CONFIG['from'],
-        to: params[:patient_number],
-        body: "We are sorry but #{current_user.name} is no longer able to pick up the phone, we will leave a message. Goodbye."
-      ) 
-      response = client.account.sms.messages.create(
-        from: TWILIO_CONFIG['from'],
         to: current_user.mobile_number,
         body: "You have missed a call back from #{params[:patient_number]} - Thank You Docit"
       )
+      response = client.account.sms.messages.create(
+        from: TWILIO_CONFIG['from'],
+        to: params[:patient_number],
+        body: "We are sorry but #{current_user.name} is no longer able to pick up the phone, we will leave a message. Goodbye."
+      ) 
       #render :action => "goodbye.xml.builder", :layout => false 
     end
     # Loop over conferences and print out a property for each one
